@@ -6,4 +6,4 @@ app.get('/', function (req, res) {
 });
 
 var port = process.argv.length == 3 ? parseInt(process.argv[2]) : 80
-app.listen(port);
+app.listen(port, '0.0.0.0');
