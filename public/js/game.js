@@ -78,6 +78,17 @@ var Game = {
         }
       break;
 
+      case 'tower_created':
+        var position = message.position;
+        var tower    = new Tower({
+          x : 4 + ((position % 20) * 40) - 40,
+          y : 125 + (160 * Math.round((position - (position % 20)) / 20)),
+          session_id : message.id
+        });
+
+        Game.map.towers.push(tower);
+      break;
+
       case 'robot_created':
         if (Game.session_id == message.id) {
           $('robot-count').innerHTML = message.robot_count;
@@ -92,13 +103,13 @@ var Game = {
         for (var i = 0, l = message.robots.length; i < l; i++) {
           (function() {
             var x     = -1;
-            var y     = 7;
+            var y     = 12;
             var dX    = 1;
             var image = 1;
 
             if (message.id != Game.session_id) {
               x     = 26;
-              y     = 8;
+              y     = 7;
               dX    = -1;
               image = 2;
             }

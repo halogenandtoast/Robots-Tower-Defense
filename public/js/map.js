@@ -40,13 +40,13 @@ Map.prototype = {
   render: function() {
     this.context.drawImage(this.images[0], 0, 0);
 
-    /*for (var i = 0, l = this.towers.length; i < l; i++) {
+    for (var i = 0, l = this.towers.length; i < l; i++) {
       var tower = this.towers[i];
 
       if (tower) {
         tower.render(this.context);
       }
-    }*/
+    }
 
     for (var i = 0, l = this.robots.length; i < l; i++) {
       var robot = this.robots[i];
