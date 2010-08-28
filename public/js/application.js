@@ -37,6 +37,7 @@ Game.prototype = {
     if (this.socket.connect()) {
       this.onConnect();
       this.map = new Map();
+      this.map.game = this;
 
       setInterval(function() {
         this.map.render();
@@ -53,6 +54,10 @@ Game.prototype = {
     message = JSON.parse(message);
 
     switch (message.action) {
+      case 'life_lost':
+        console.log('Shit I lost a life!');
+      break;
+
       case 'unit_created':
         this.unit_count = message.unit_count;
       break;
@@ -71,10 +76,11 @@ Game.prototype = {
             }
 
             var unit = new Unit({
-              x     : x,
-              y     : y,
-              dX    : dX,
-              speed : message.speed
+              x          : x,
+              y          : y,
+              dX         : dX,
+              speed      : message.speed,
+              session_id : message.id
             });
 
             this.map.addUnit(unit);
@@ -183,13 +189,14 @@ Tower.prototype = {
 };
 
 var Unit = function(options) {
-  this.x       = options.x;
-  this.y       = options.y;
-  this.dX      = options.dX;
-  this.dY      = 0;
-  this.speed   = options.speed;
-  this.offsetX = 0;
-  this.offsetY = 0;
+  this.x          = options.x;
+  this.y          = options.y;
+  this.dX         = options.dX;
+  this.dY         = 0;
+  this.speed      = options.speed;
+  this.offsetX    = 0;
+  this.offsetY    = 0;
+  this.session_id = options.session_id;
 };
 
 Unit.prototype = {
@@ -215,7 +222,11 @@ Unit.prototype = {
       this.offsetY  = 0;
     }
 
-    if (this.x < -1 || this.y < -1) {
+    if (this.x < -1 || this.x > 26) {
+      if (this.map.game.socket.transport.sessionid == this.session_id) {
+        this.map.game.send({ 'action' : 'lose_life' });
+      }
+
       this.map.removeUnit(this);
     }
   }
