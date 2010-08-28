@@ -6,6 +6,74 @@ Function.prototype.bind = function(scope) {
   };
 };
 
+
+
+
+var Game = function() {
+  this.createSocket();
+};
+
+Game.prototype = {
+  bindEventListeners: function() {
+    var $ = function(id) { return document.getElementById(id); };
+
+    $('add-unit').addEventListener('click', function(event) {
+      this.addUnit();
+
+      event.preventDefault();
+    }.bind(this));
+
+    $('launch-wave').addEventListener('click', function(event) {
+      this.launchWave();
+
+      event.preventDefault();
+    }.bind(this));
+  },
+
+  createSocket: function() {
+    this.socket = new io.Socket(window.location.hostname, { port: 8024 });
+    this.socket.on('message', this.onMessage.bind(this));
+
+    if (this.socket.connect()) {
+      this.onConnect();
+
+      // TEMPORARY
+      var
+      map = new Map();
+      map.addUnit(new Unit(18, 7));
+      map.towers.push(new Tower(5, 5));
+      map.towers.push(new Tower(15, 5));
+      map.towers.push(new Tower(10, 10));
+
+      setInterval(function() {
+        map.render();
+      }, 1000 / 30);
+    }
+  },
+
+
+  onConnect: function() {
+    this.bindEventListeners();
+  },
+
+  onMessage: function(message) {
+    console.log(message);
+  },
+
+
+  addUnit: function() {
+    this.send({ 'action' : 'create_unit' });
+  },
+
+  launchWave: function() {
+    this.send({ 'action' : 'launch_wave' });
+  },
+
+  send: function(data) {
+    this.socket.send(JSON.stringify(data));
+  }
+};
+
 var Map = function() {
   this.createCanvas();
   this.bindEventListeners();
@@ -123,22 +191,4 @@ Unit.prototype = {
   }
 };
 
-
-
-
-var socket = new io.Socket(window.location.hostname, { port: 8024 });
-
-if (socket.connect()) {
-  console.log('Connected.');
-
-  var
-  map = new Map();
-  map.addUnit(new Unit(18, 7));
-  map.towers.push(new Tower(5, 5));
-  map.towers.push(new Tower(15, 5));
-  map.towers.push(new Tower(10, 10));
-
-  setInterval(function() {
-    map.render();
-  }, 1000 / 30);
-}
+new Game();

@@ -5,8 +5,26 @@ body {
   overflow: hidden;
 }
 
+ul,
+li,
 body,
 canvas {
   margin: 0;
   padding: 0;
+  list-style: none;
+}
+
+#hud {
+  background: #FFF;
+  position: fixed;
+  right: 5px;
+  bottom: 5px;
+  padding: 8px;
+}
+
+#win {
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  border: 0;
 }
