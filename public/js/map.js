@@ -4,7 +4,7 @@ var Map = function() {
 };
 
 Map.prototype = {
-  robots  : [],
+  robots : [],
   towers : [],
 
   createCanvas: function() {
@@ -44,6 +44,7 @@ Map.prototype = {
       var tower = this.towers[i];
 
       if (tower) {
+        tower.update();
         tower.render(this.context);
       }
     }
@@ -56,6 +57,28 @@ Map.prototype = {
         robot.render(this.context);
       }
     }
+  },
+
+  findRobotIn: function(x, y, radius, session_id) {
+    for (var i = 0, l = this.robots.length; i < l; i++) {
+      var robot = this.robots[i];
+
+      if (robot.session_id == session_id) {
+        continue;
+      }
+
+      var rX = (robot.x * 32) + robot.offsetX - 16;
+      var rY = (robot.y * 32) + robot.offsetY - 16;
+
+      x += 16;
+      y += 16;
+
+      if (Math.pow((x - rX), 2) + Math.pow((y - rY), 2) < Math.pow(radius, 2)) {
+        return robot;
+      }
+    }
+
+    return false;
   },
 
 
@@ -71,9 +94,9 @@ Map.prototype = {
     this.robots.push(robot);
   },
 
-  removeRobot: function(robot) {
+  removeRobotBySerialNumber: function(serial_number) {
     for (var i = 0, l = this.robots.length; i < l; i++) {
-      if (this.robots[i] == robot) {
+      if (this.robots[i].serial_number == serial_number) {
         this.robots.splice(i, 1);
         break;
       }

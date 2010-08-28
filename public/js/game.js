@@ -95,6 +95,10 @@ var Game = {
         }
       break;
 
+      case 'robot_destroyed':
+        Game.map.removeRobotBySerialNumber(message.serial_number);
+      break;
+
       case 'wave_launched':
         if (Game.session_id == message.id) {
           $('robot-count').innerHTML = 0;
@@ -115,18 +119,16 @@ var Game = {
             }
 
             var robot = new Robot({
-                x          : x,
-                y          : y,
-                dX         : dX,
-                image      : image,
-                speed      : message.robots[i].speed,
-                serial_number : message.robots[i].serial_number,
-                session_id : message.id
-              });
+              x             : x,
+              y             : y,
+              dX            : dX,
+              image         : image,
+              speed         : message.robots[i].speed,
+              session_id    : message.id,
+              serial_number : message.robots[i].serial_number
+            });
 
             setTimeout(function() {
-              console.log("ROBOT");
-              console.log(robot);
               Game.map.addRobot(robot);
             }, 1000 * i);
           })();

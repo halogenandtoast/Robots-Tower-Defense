@@ -22,7 +22,7 @@ Robot.prototype = {
       context.translate(x, y);
       context.rotate(Math.PI);
     } else {
-      context.translate(x, y - 32);
+      context.translate(x, y);
     }
 
     context.drawImage(this.map.images[this.image], 0, 0);
@@ -48,7 +48,7 @@ Robot.prototype = {
         Game.send({ 'action' : 'lose_life' });
       }
 
-      this.map.removeRobot(this);
+      this.map.removeRobotBySerialNumber(this.serial_number);
     }
   }
 };

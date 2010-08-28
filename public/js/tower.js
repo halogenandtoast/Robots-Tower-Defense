@@ -1,18 +1,40 @@
 var Tower = function(options) {
-  this.x = options.x;
-  this.y = options.y;
+  this.x      = options.x;
+  this.y      = options.y;
+  this.rate   = options.rate   || 1;
+  this.range  = options.range  || 96;
+  this.damage = options.damage || 1;
   this.session_id = options.session_id;
 };
 
 Tower.prototype = {
   render: function(context) {
-    var x = this.x;
-    var y = this.y;
-
     context.save();
-    context.translate(x, y);
+    context.translate(this.x, this.y);
     context.drawImage(Tower.image, 0, 0);
     context.restore();
+  },
+
+  update: function() {
+    if (!this.last_update) {
+      this.last_update = (new Date()).getTime();
+    }
+
+    var now   = (new Date()).getTime();
+    var delay = 1000 / this.rate;
+
+    if (now - this.last_update > delay) {
+      this.last_update = now;
+
+      var robot = Game.map.findRobotIn(this.x, this.y, this.range, this.session_id);
+
+      if (robot) {
+        Game.send({
+          'action'        : 'damage_robot',
+          'serial_number' : robot.serial_number
+        });
+      }
+    }
   }
 };
 
