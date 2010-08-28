@@ -7,8 +7,7 @@ var express = require('express'),
     socket = io.listen(server),
     json = JSON.stringify,
     log = sys.puts,
-    Game = require(__dirname+"/lib/game").Game,
-    game = new Game(),
+    World = require(__dirname+"/lib/world").World,
     actions = ['create_unit', 'launch_wave', 'lose_life'];
 
 app.configure(function() {
@@ -29,6 +28,7 @@ function invalidRequest(request) {
 }
 
 socket.on('connection', function(client) {
+  var game = World.get_game();
   game.add_player(client);
 
   client.on('message', function(message) {
@@ -45,6 +45,10 @@ socket.on('connection', function(client) {
       return false;
     }
 
+    if(!game.ready) {
+      log('Can not start yet');
+      return false;
+    }
     var player = game.player(client);
 
     if(request.action == 'create_unit') {
