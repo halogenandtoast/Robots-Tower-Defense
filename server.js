@@ -1,8 +1,9 @@
-var http = require('http');
+var socketIO = require(__dirname+"/vendor/socketIO").socketIO,
+    app = require('express').createServer();
 
-var server = http.createServer(function (req, res) {
-  res.writeHead(200, { "Content-Type": "text/plain" })
-  res.end("Hello world\n");
+app.get('/', function (req, res) {
+  res.send('oh hai');
 });
 
-server.listen(80);
+var port = process.argv.length == 3 ? parseInt(process.argv[2]) : 80
+app.listen(port);
