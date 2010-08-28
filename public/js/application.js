@@ -12,7 +12,8 @@ var Map = function() {
 };
 
 Map.prototype = {
-  towers: [],
+  units  : [],
+  towers : [],
 
   bindEventListeners: function() {
     window.addEventListener('resize', this.onResize.bind(this));
@@ -36,11 +37,35 @@ Map.prototype = {
       tower = this.towers[i];
       tower.render(this.context);
     }
+
+    for (var i = 0, l = this.units.length; i < l; i++) {
+      var
+      unit = this.units[i];
+      unit.update();
+      unit.render(this.context);
+    }
   },
+
 
   onResize: function() {
     this.canvas.width  = this.body.clientWidth;
     this.canvas.height = this.body.clientHeight;
+  },
+
+
+  addUnit: function(unit) {
+    unit.map = this;
+
+    this.units.push(unit);
+  },
+
+  removeUnit: function(unit) {
+    for (var i = 0, l = this.units.length; i < l; i++) {
+      if (this.units[i] == unit) {
+        this.units.splice(i, 1);
+        break;
+      }
+    }
   }
 };
 
@@ -59,6 +84,45 @@ Tower.prototype = {
   }
 };
 
+var Unit = function(x, y) {
+  this.x       = x;
+  this.y       = y;
+  this.dX      = -1;
+  this.dY      = 0;
+  this.speed   = 2;
+  this.offsetX = 0;
+  this.offsetY = 0;
+};
+
+Unit.prototype = {
+  render: function(context) {
+    var x = (this.x * 32) + this.offsetX;
+    var y = (this.y * 32) + this.offsetY;
+
+    context.fillStyle = '#00C';
+    context.fillRect(x, y, 32, 32);
+  },
+
+  update: function() {
+    this.offsetX += (this.speed * this.dX);
+    this.offsetY += (this.speed * this.dY);
+
+    if (Math.abs(this.offsetX) >= 32) {
+      this.x       += this.dX;
+      this.offsetX  = 0;
+    }
+
+    if (Math.abs(this.offsetY) >= 32) {
+      this.y       += this.dY;
+      this.offsetY  = 0;
+    }
+
+    if (this.x < 0 || this.y < 0) {
+      this.map.removeUnit(this);
+    }
+  }
+};
+
 
 
 
@@ -69,6 +133,7 @@ if (socket.connect()) {
 
   var
   map = new Map();
+  map.addUnit(new Unit(18, 7));
   map.towers.push(new Tower(5, 5));
   map.towers.push(new Tower(15, 5));
   map.towers.push(new Tower(10, 10));
