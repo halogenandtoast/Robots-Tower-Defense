@@ -29,7 +29,7 @@ function invalidRequest(request) {
   return actions.indexOf(request.action) == -1;
 }
 
-function createReponse(action, object) {
+function createResponse(action, object) {
   object.id = client.sessionId;
   object.action = action;
   return object;
