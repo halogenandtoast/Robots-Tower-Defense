@@ -65,20 +65,23 @@ Game.prototype = {
       case 'wave_launched':
         for (var i = 0, l = message.units.length; i < l; i++) {
           setTimeout(function() {
-            var x  = -1;
-            var y  = 7;
-            var dX = 1;
+            var x     = -1;
+            var y     = 7;
+            var dX    = 1;
+            var image = 1;
 
             if (message.id != this.socket.transport.sessionid) {
-              x  = 26;
-              y  = 8;
-              dX = -1;
+              x     = 26;
+              y     = 8;
+              dX    = -1;
+              image = 2;
             }
 
             var unit = new Unit({
               x          : x,
               y          : y,
               dX         : dX,
+              image      : image,
               speed      : message.speed,
               session_id : message.id
             });
@@ -107,6 +110,7 @@ Game.prototype = {
 };
 
 var Map = function() {
+  this.loadImages();
   this.createCanvas();
   this.bindEventListeners();
 };
@@ -128,8 +132,16 @@ Map.prototype = {
     this.body.appendChild(this.canvas);
   },
 
+  loadImages: function() {
+    this.images = [];
+    this.images[1] = new Image();
+    this.images[1].src = '/images/robot-1.png';
+    this.images[2] = new Image();
+    this.images[2].src = '/images/robot-2.png';
+  },
+
   render: function() {
-    this.context.fillStyle = '#444';
+    this.context.fillStyle = '#D7CFA1';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     /*for (var i = 0, l = this.towers.length; i < l; i++) {
@@ -193,6 +205,7 @@ var Unit = function(options) {
   this.y          = options.y;
   this.dX         = options.dX;
   this.dY         = 0;
+  this.image      = options.image;
   this.speed      = options.speed;
   this.offsetX    = 0;
   this.offsetY    = 0;
@@ -204,8 +217,17 @@ Unit.prototype = {
     var x = (this.x * 32) + this.offsetX;
     var y = (this.y * 32) + this.offsetY;
 
-    context.fillStyle = '#00C';
-    context.fillRect(x, y, 32, 32);
+    context.save();
+
+    if (this.image == 2) {
+      context.translate(x, y);
+      context.rotate(Math.PI);
+    } else {
+      context.translate(x, y - 32);
+    }
+
+    context.drawImage(this.map.images[this.image], 0, 0);
+    context.restore();
   },
 
   update: function() {
