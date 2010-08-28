@@ -63,7 +63,24 @@ Game.prototype = {
       case 'wave_launched':
         for (var i = 0, l = message.units.length; i < l; i++) {
           setTimeout(function() {
-            this.map.addUnit(new Unit(18, 7, message.speed));
+            var x  = -1;
+            var y  = 7;
+            var dX = 1;
+
+            if (message.id != this.socket.transport.sessionid) {
+              x  = 26;
+              y  = 8;
+              dX = -1;
+            }
+
+            var unit = new Unit({
+              x     : x,
+              y     : y,
+              dX    : dX,
+              speed : message.speed
+            });
+
+            this.map.addUnit(unit);
           }.bind(this), 1000 * i);
         }
       break;
@@ -168,12 +185,12 @@ Tower.prototype = {
   }
 };
 
-var Unit = function(x, y, speed) {
-  this.x       = x;
-  this.y       = y;
-  this.dX      = -1;
+var Unit = function(options) {
+  this.x       = options.x;
+  this.y       = options.y;
+  this.dX      = options.dX;
   this.dY      = 0;
-  this.speed   = speed || 1;
+  this.speed   = options.speed;
   this.offsetX = 0;
   this.offsetY = 0;
 };
@@ -201,7 +218,7 @@ Unit.prototype = {
       this.offsetY  = 0;
     }
 
-    if (this.x < 0 || this.y < 0) {
+    if (this.x < -1 || this.y < -1) {
       this.map.removeUnit(this);
     }
   }
