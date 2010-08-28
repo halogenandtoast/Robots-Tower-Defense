@@ -24,6 +24,8 @@ Game.prototype = {
     }.bind(this));
 
     $('launch-wave').addEventListener('click', function(event) {
+      $('unit-count').innerHTML = 0;
+
       this.launchWave();
 
       event.preventDefault();
@@ -55,11 +57,17 @@ Game.prototype = {
 
     switch (message.action) {
       case 'life_lost':
-        console.log('Shit I lost a life!');
+        if (this.socket.transport.sessionid == message.id) {
+          var element = document.getElementById('health');
+
+          element.innerHTML = parseInt(element.innerHTML, 10) - 1;
+        }
       break;
 
       case 'unit_created':
-        this.unit_count = message.unit_count;
+        if (this.socket.transport.sessionid == message.id) {
+          document.getElementById('unit-count').innerHTML = message.unit_count;
+        }
       break;
 
       case 'wave_launched':
