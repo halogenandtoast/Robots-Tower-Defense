@@ -49,7 +49,7 @@ socket.on('connection', function(client) {
       log('Can not start yet');
       return false;
     } else if(game.finished) {
-      log('Finished')l
+      log('Finished');
       return false;
     }
     var player = game.player(client);
