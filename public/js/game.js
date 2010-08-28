@@ -78,6 +78,14 @@ var Game = {
         }
       break;
 
+      case 'tower_created':
+        var position = message.position;
+        var x        = 4 + ((position % 20) * 40) - 40;
+        var y        = 125 + (160 * Math.round((position - (position % 20)) / 20));
+
+        Game.map.towers.push(new Tower(x, y));
+      break;
+
       case 'robot_created':
         if (Game.session_id == message.id) {
           $('robot-count').innerHTML = message.robot_count;
