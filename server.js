@@ -66,7 +66,9 @@ socket.on('connection', function(client) {
       player[client.sessionId]['wave']['units'].push('1');
       relay(client, 'unit_created', { unit_count: player[client.sessionId]['wave']['units'].length });
     } else if (request.action == 'launch_wave') {
-      relay(client, 'wave_launched', player[client.sessionId]['wave']);
+      wave = player[client.sessionId]['wave'].clone()
+      player[client.sessionId]['wave']['units'] = [];
+      relay(client, 'wave_launched', wave);
     } else if (request.action == 'lose_life') {
       player[client.sessionId]['life']--;
       relay(client, 'life_lost', { life: player[client.sessionId]['life'] });
