@@ -108,7 +108,7 @@ var Game = {
               y          : y,
               dX         : dX,
               image      : image,
-              speed      : message.speed,
+              speed      : message.robots[i].speed,
               session_id : message.id
             });
 
