@@ -37,9 +37,6 @@ Game.prototype = {
     if (this.socket.connect()) {
       this.onConnect();
       this.map = new Map();
-      this.map.towers.push(new Tower(5, 5));
-      this.map.towers.push(new Tower(15, 5));
-      this.map.towers.push(new Tower(10, 10));
 
       setInterval(function() {
         this.map.render();
@@ -129,13 +126,13 @@ Map.prototype = {
     this.context.fillStyle = '#444';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    for (var i = 0, l = this.towers.length; i < l; i++) {
+    /*for (var i = 0, l = this.towers.length; i < l; i++) {
       var tower = this.towers[i];
 
       if (tower) {
         tower.render(this.context);
       }
-    }
+    }*/
 
     for (var i = 0, l = this.units.length; i < l; i++) {
       var unit = this.units[i];
