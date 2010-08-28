@@ -1,28 +1,25 @@
 var Map = function() {
   this.loadImages();
   this.createCanvas();
-  this.bindEventListeners();
 };
 
 Map.prototype = {
   units  : [],
   towers : [],
 
-  bindEventListeners: function() {
-    window.addEventListener('resize', this.onResize.bind(this));
-  },
-
   createCanvas: function() {
     this.body    = document.getElementsByTagName('body')[0];
     this.canvas  = document.createElement('canvas');
     this.context = this.canvas.getContext('2d');
-    this.canvas.width  = this.body.clientWidth;
-    this.canvas.height = this.body.clientHeight;
+    this.canvas.width  = 800;
+    this.canvas.height = 600;
     this.body.appendChild(this.canvas);
   },
 
   loadImages: function() {
     this.images = [];
+    this.images[0] = new Image();
+    this.images[0].src = '/images/map.png';
     this.images[1] = new Image();
     this.images[1].src = '/images/robot-1.png';
     this.images[2] = new Image();
@@ -30,8 +27,7 @@ Map.prototype = {
   },
 
   render: function() {
-    this.context.fillStyle = '#D7CFA1';
-    this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.drawImage(this.images[0], 0, 0);
 
     /*for (var i = 0, l = this.towers.length; i < l; i++) {
       var tower = this.towers[i];
