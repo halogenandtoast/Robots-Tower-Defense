@@ -20,6 +20,19 @@ canvas {
   right: 5px;
   bottom: 5px;
   padding: 8px;
+  display: none;
+}
+
+#waiting {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 320px;
+  height: 32px;
+  margin: -16px 0 0 -160px;
+  padding: 9px 0;
+  font: bold 14px/1 Helvetica, Arial, Sans-serif;
+  text-align: center;
 }
 
 #win {

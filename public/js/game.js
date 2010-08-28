@@ -17,16 +17,21 @@ var Game = {
     var
     socket = new io.Socket(window.location.hostname, { port : 8024 });
     socket.on('message', Game.onMessage);
+    socket.connect();
 
-    if (socket.connect()) {
-      Game.map    = new Map();
-      Game.socket = socket;
-      Game.bindEventListeners();
+    Game.socket = socket;
+  },
 
-      setInterval(function() {
-        Game.map.render();
-      }.bind(this), 1000 / 30);
-    }
+  onReady: function() {
+    Game.map    = new Map();
+    Game.bindEventListeners();
+
+    $('hud').style.display = 'block';
+    $('waiting').style.display = 'none'
+
+    setInterval(function() {
+      Game.map.render();
+    }.bind(this), 1000 / 30);
   },
 
   onMessage: function(message) {
@@ -37,6 +42,32 @@ var Game = {
     message = JSON.parse(message);
 
     switch (message.action) {
+      case 'game_ready':
+        Game.onReady();
+      break;
+
+      case 'game_finished':
+        if (Game.session_id == message.id) {
+          $('waiting').innerHTML = 'You lost! Reload to play again.';
+        } else {
+          $('waiting').innerHTML = 'You won! Reload to play again.';
+        }
+
+        $('hud').style.display = 'none';
+        $('waiting').style.display = 'block';
+      break;
+
+      case 'game_disbanded':
+        if (Game.session_id == message.id) {
+          $('waiting').innerHTML = 'You were disconnected. Reload to play again.';
+        } else {
+          $('waiting').innerHTML = 'Your opponent disconnected. Reload to play again.';
+        }
+
+        $('hud').style.display = 'none';
+        $('waiting').style.display = 'block';
+      break;
+
       case 'life_lost':
         if (Game.session_id == message.id) {
           var
