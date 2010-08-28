@@ -59,12 +59,12 @@ socket.on('connection', function(client) {
     if(request.action == 'create_unit') {
       player[client.sessionId]['wave']['units'].push('1');
     } else if (request.action == 'launch_wave') {
-      response = createResponse('launch_wave', player[client.sessionId]['wave'].clone());
+      response = createResponse('wave_launched', player[client.sessionId]['wave'].clone());
       client.send(json(response));
       client.broadcast(json(response));
     } else if (request.action == 'lose_life') {
       player[client.sessionId]['life']--;
-      response = createResponse('lose_life', { life: player[client.sessionId]['life'] });
+      response = createResponse('life_lost', { life: player[client.sessionId]['life'] });
       client.send(json(reponse));
       client.broadcast(json(response));
     }
