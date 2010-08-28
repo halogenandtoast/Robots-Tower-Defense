@@ -52,6 +52,10 @@ var Game = {
       break;
 
       case 'wave_launched':
+        if (Game.session_id == message.id) {
+          $('unit-count').innerHTML = 0;
+        }
+
         for (var i = 0, l = message.units.length; i < l; i++) {
           setTimeout(function() {
             var x     = -1;
@@ -89,7 +93,6 @@ var Game = {
   },
 
   launchWave: function() {
-    $('unit-count').innerHTML = 0;
     Game.send({ 'action' : 'launch_wave' });
   },
 
