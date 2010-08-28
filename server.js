@@ -9,9 +9,10 @@ var express = require('express'),
     log = sys.puts,
     World = require(__dirname+"/lib/world").World,
     actions = [
-      'create_unit',
+      'create_robot',
       'create_tower',
       'launch_wave',
+      'damage_robot',
       'lose_life'
     ];
 

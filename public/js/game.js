@@ -1,7 +1,7 @@
 var Game = {
   bindEventListeners: function() {
-    $('add-unit').addEventListener('click', function(event) {
-      Game.addUnit();
+    $('add-robot').addEventListener('click', function(event) {
+      Game.addRobot();
 
       event.preventDefault();
     });
@@ -78,18 +78,18 @@ var Game = {
         }
       break;
 
-      case 'unit_created':
+      case 'robot_created':
         if (Game.session_id == message.id) {
-          $('unit-count').innerHTML = message.unit_count;
+          $('robot-count').innerHTML = message.robot_count;
         }
       break;
 
       case 'wave_launched':
         if (Game.session_id == message.id) {
-          $('unit-count').innerHTML = 0;
+          $('robot-count').innerHTML = 0;
         }
 
-        for (var i = 0, l = message.units.length; i < l; i++) {
+        for (var i = 0, l = message.robots.length; i < l; i++) {
           setTimeout(function() {
             var x     = -1;
             var y     = 7;
@@ -103,7 +103,7 @@ var Game = {
               image = 2;
             }
 
-            var unit = new Unit({
+            var robot = new Robot({
               x          : x,
               y          : y,
               dX         : dX,
@@ -112,7 +112,7 @@ var Game = {
               session_id : message.id
             });
 
-            Game.map.addUnit(unit);
+            Game.map.addRobot(robot);
           }, 1000 * i);
         }
       break;
@@ -121,8 +121,8 @@ var Game = {
     console.log(message);
   },
 
-  addUnit: function() {
-    Game.send({ 'action' : 'create_unit' });
+  addRobot: function() {
+    Game.send({ 'action' : 'create_robot' });
   },
 
   launchWave: function() {

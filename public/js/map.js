@@ -5,7 +5,7 @@ var Map = function() {
 };
 
 Map.prototype = {
-  units  : [],
+  robots  : [],
   towers : [],
 
   bindEventListeners: function() {
@@ -41,12 +41,12 @@ Map.prototype = {
       }
     }*/
 
-    for (var i = 0, l = this.units.length; i < l; i++) {
-      var unit = this.units[i];
+    for (var i = 0, l = this.robots.length; i < l; i++) {
+      var robot = this.robots[i];
 
-      if (unit) {
-        unit.update();
-        unit.render(this.context);
+      if (robot) {
+        robot.update();
+        robot.render(this.context);
       }
     }
   },
@@ -58,16 +58,16 @@ Map.prototype = {
   },
 
 
-  addUnit: function(unit) {
-    unit.map = this;
+  addRobot: function(robot) {
+    robot.map = this;
 
-    this.units.push(unit);
+    this.robots.push(robot);
   },
 
-  removeUnit: function(unit) {
-    for (var i = 0, l = this.units.length; i < l; i++) {
-      if (this.units[i] == unit) {
-        this.units.splice(i, 1);
+  removeRobot: function(robot) {
+    for (var i = 0, l = this.robots.length; i < l; i++) {
+      if (this.robots[i] == robot) {
+        this.robots.splice(i, 1);
         break;
       }
     }

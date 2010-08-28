@@ -1,4 +1,4 @@
-var Unit = function(options) {
+var Robot = function(options) {
   this.x          = options.x;
   this.y          = options.y;
   this.dX         = options.dX;
@@ -10,7 +10,7 @@ var Unit = function(options) {
   this.session_id = options.session_id;
 };
 
-Unit.prototype = {
+Robot.prototype = {
   render: function(context) {
     var x = (this.x * 32) + this.offsetX;
     var y = (this.y * 32) + this.offsetY;
@@ -47,7 +47,7 @@ Unit.prototype = {
         Game.send({ 'action' : 'lose_life' });
       }
 
-      this.map.removeUnit(this);
+      this.map.removeRobot(this);
     }
   }
 };
