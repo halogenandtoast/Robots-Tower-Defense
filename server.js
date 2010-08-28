@@ -7,11 +7,9 @@ var express = require('express'),
     socket = io.listen(server),
     json = JSON.stringify,
     log = sys.puts,
-    Player = require(__dirname+'/lib/player').Player,
-    actions = ['create_unit', 'launch_wave', 'lose_life'],
-    waves = {},
-    upgrades = {};
-    players = {};
+    Game = require(__dirname+"/lib/game").Game,
+    game = new Game(),
+    actions = ['create_unit', 'launch_wave', 'lose_life'];
 
 app.configure(function() {
   app.use(express.staticProvider(__dirname + '/public'));
@@ -31,23 +29,11 @@ function invalidRequest(request) {
   return actions.indexOf(request.action) == -1;
 }
 
-function createResponse(client, action, object) {
-  object.id = client.sessionId;
-  object.action = action;
-  return object;
-}
-
-function relay(client, action, object) {
-  response = createResponse(client, action, object);
-  client.send(json(response));
-  client.broadcast(json(response));
-}
-
 function player(client) {
   return players[client.sessionId];
 }
 socket.on('connection', function(client) {
-  players[client.sessionId] = new Player();
+  game.add_player(client);
 
   client.on('message', function(message) {
     try {
@@ -63,18 +49,14 @@ socket.on('connection', function(client) {
       return false;
     }
 
-    var _player = player(client);
+    var player = game.player(client);
 
     if(request.action == 'create_unit') {
-      _player.wave.units.push('1');
-      relay(client, 'unit_created', { unit_count: _player.wave.units.length });
+      player.create_unit();
     } else if (request.action == 'launch_wave') {
-      wave = _player.wave.hash();
-      _player.new_wave();
-      relay(client, 'wave_launched', wave);
+      player.launch_wave();
     } else if (request.action == 'lose_life') {
-      _player.lose_life();
-      relay(client, 'life_lost', { life: _player.life });
+      player.lose_life();
     }
   });
 });
