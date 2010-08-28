@@ -1,3 +1,11 @@
+Function.prototype.bind = function(scope) {
+  var _function = this;
+
+  return function() {
+    return _function.apply(scope, arguments);
+  };
+};
+
 var Map = function() {
   this.createCanvas();
   this.bindEventListeners();
@@ -69,14 +77,3 @@ if (socket.connect()) {
     map.render();
   }, 1000 / 30);
 }
-
-
-
-
-Function.prototype.bind = function(scope) {
-  var _function = this;
-
-  return function() {
-    return _function.apply(scope, arguments);
-  };
-};
