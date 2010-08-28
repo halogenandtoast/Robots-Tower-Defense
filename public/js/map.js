@@ -13,6 +13,17 @@ Map.prototype = {
     this.context = this.canvas.getContext('2d');
     this.canvas.width  = 800;
     this.canvas.height = 600;
+    this.canvas.addEventListener('click', function(event) {
+      var x = event.offsetX;
+      var y = event.offsetY;
+
+      if (y >= 117 && y <= 477) {
+        Game.send({
+          'action'   : 'create_tower',
+          'position' : 1 + Math.floor(x / 40) + (20 * Math.floor((y - 117) / 160))
+        });
+      }
+    });
     this.body.appendChild(this.canvas);
   },
 
