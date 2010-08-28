@@ -29,13 +29,13 @@ function invalidRequest(request) {
   return actions.indexOf(request.action) == -1;
 }
 
-function createResponse(action, object) {
+function createResponse(client, action, object) {
   object.id = client.sessionId;
   object.action = action;
   return object;
 }
 
-function relay(action, object) {
+function relay(client, action, object) {
   response = createResponse(action, object);
   client.send(json(response));
   client.broadcast(json(response));
@@ -64,12 +64,12 @@ socket.on('connection', function(client) {
 
     if(request.action == 'create_unit') {
       player[client.sessionId]['wave']['units'].push('1');
-      relay('unit_created', { unit_count: player[client.sessionId]['wave']['units'].length });
+      relay(client, 'unit_created', { unit_count: player[client.sessionId]['wave']['units'].length });
     } else if (request.action == 'launch_wave') {
-      relay('wave_launched', player[client.sessionId]['wave'].clone());
+      relay(client, 'wave_launched', player[client.sessionId]['wave'].clone());
     } else if (request.action == 'lose_life') {
       player[client.sessionId]['life']--;
-      relay('life_lost', { life: player[client.sessionId]['life'] });
+      relay(client, 'life_lost', { life: player[client.sessionId]['life'] });
     }
   });
 });
