@@ -1,4 +1,4 @@
-var socketIO = require(__dirname+"/vendor/socketIO").socketIO,
+var socketIO = require(__dirname+"/socketIO").socketIO,
     app = require('express').createServer();
 
 app.get('/', function (req, res) {
