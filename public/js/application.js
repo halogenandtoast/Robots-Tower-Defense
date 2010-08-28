@@ -4,6 +4,8 @@ var Map = function() {
 };
 
 Map.prototype = {
+  towers: [],
+
   bindEventListeners: function() {
     window.addEventListener('resize', this.onResize.bind(this));
   },
@@ -20,6 +22,12 @@ Map.prototype = {
   render: function() {
     this.context.fillStyle = '#444';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    for (var i = 0, l = this.towers.length; i < l; i++) {
+      var
+      tower = this.towers[i];
+      tower.render(this.context);
+    }
   },
 
   onResize: function() {
@@ -28,12 +36,34 @@ Map.prototype = {
   }
 };
 
+var Tower = function(x, y) {
+  this.x = x;
+  this.y = y;
+};
+
+Tower.prototype = {
+  render: function(context) {
+    var x = this.x * 32;
+    var y = this.y * 32;
+
+    context.fillStyle = '#C00';
+    context.fillRect(x, y, 32, 32);
+  }
+};
+
+
+
+
 var socket = new io.Socket(window.location.hostname, { port: 8024 });
 
 if (socket.connect()) {
   console.log('Connected.');
 
-  var map = new Map();
+  var
+  map = new Map();
+  map.towers.push(new Tower(5, 5));
+  map.towers.push(new Tower(15, 5));
+  map.towers.push(new Tower(10, 10));
 
   setInterval(function() {
     map.render();
