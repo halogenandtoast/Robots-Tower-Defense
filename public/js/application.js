@@ -36,18 +36,14 @@ Game.prototype = {
 
     if (this.socket.connect()) {
       this.onConnect();
-
-      // TEMPORARY
-      var
-      map = new Map();
-      map.addUnit(new Unit(18, 7));
-      map.towers.push(new Tower(5, 5));
-      map.towers.push(new Tower(15, 5));
-      map.towers.push(new Tower(10, 10));
+      this.map = new Map();
+      this.map.towers.push(new Tower(5, 5));
+      this.map.towers.push(new Tower(15, 5));
+      this.map.towers.push(new Tower(10, 10));
 
       setInterval(function() {
-        map.render();
-      }, 1000 / 30);
+        this.map.render();
+      }.bind(this), 1000 / 30);
     }
   },
 
@@ -57,6 +53,22 @@ Game.prototype = {
   },
 
   onMessage: function(message) {
+    message = JSON.parse(message);
+
+    switch (message.action) {
+      case 'unit_created':
+        this.unit_count = message.unit_count;
+      break;
+
+      case 'wave_launched':
+        for (var i = 0, l = message.units.length; i < l; i++) {
+          setTimeout(function() {
+            this.map.addUnit(new Unit(18, 7, message.speed));
+          }.bind(this), 1000 * i);
+        }
+      break;
+    }
+
     console.log(message);
   },
 
@@ -101,16 +113,20 @@ Map.prototype = {
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (var i = 0, l = this.towers.length; i < l; i++) {
-      var
-      tower = this.towers[i];
-      tower.render(this.context);
+      var tower = this.towers[i];
+
+      if (tower) {
+        tower.render(this.context);
+      }
     }
 
     for (var i = 0, l = this.units.length; i < l; i++) {
-      var
-      unit = this.units[i];
-      unit.update();
-      unit.render(this.context);
+      var unit = this.units[i];
+
+      if (unit) {
+        unit.update();
+        unit.render(this.context);
+      }
     }
   },
 
@@ -152,12 +168,12 @@ Tower.prototype = {
   }
 };
 
-var Unit = function(x, y) {
+var Unit = function(x, y, speed) {
   this.x       = x;
   this.y       = y;
   this.dX      = -1;
   this.dY      = 0;
-  this.speed   = 2;
+  this.speed   = speed || 1;
   this.offsetX = 0;
   this.offsetY = 0;
 };
@@ -191,4 +207,4 @@ Unit.prototype = {
   }
 };
 
-new Game();
+var game = new Game();
