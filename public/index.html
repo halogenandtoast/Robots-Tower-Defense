@@ -4,6 +4,11 @@
     <title>Foo</title>
     <script src="json2.js"></script>
     <script src="socket.io.js"></script>
+    <script>
+      var socket = new io.Socket('localhost', {port: 8024});
+      if(socket.connect()) {
+      }
+    </script>
   </head>
   <body>
   </body>
