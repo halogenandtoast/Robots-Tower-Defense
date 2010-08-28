@@ -7,7 +7,10 @@ var express = require('express'),
     socket = io.listen(server),
     json = JSON.stringify,
     log = sys.puts,
-    actions = [];
+    actions = ['create_unit'],
+    waves = {},
+    upgrades = {};
+    player = {};
 
 app.configure(function() {
   app.use(express.staticProvider(__dirname + '/public'));
@@ -27,6 +30,12 @@ function invalidRequest(request) {
 }
 
 socket.on('connection', function(client) {
+  player[client.sessionId] = {
+    life: 10,
+    upgrades: {'speed': 1},
+    wave: {'units': [], 'speed': 1}
+  };
+
   client.on('message', function(message) {
     try {
       request = JSON.parse(message.replace('<', '&lt;').replace('>', '&gt;'));
@@ -41,6 +50,23 @@ socket.on('connection', function(client) {
       return false;
     }
 
-    console.log(message);
+    if(request.action == 'create_unit') {
+      player[client.sessionId]['wave']['units'].push('1');
+    } else if (request.action == 'launch_wave') {
+      response = player[client.sessionId]['wave'].clone();
+      response.id = client.sessionId
+      response.action = 'launch_wave';
+      client.send(json(response));
+      client.broadcast(json(response));
+    } else if (request.action == 'lose_life') {
+      player[client.sessionId]['life']--;
+      response = {
+        'id': client.sessionId,
+        'action': 'lose_life',
+        'life': player[client.sessionId]['life']
+      };
+      client.send(json(reponse));
+      client.broadcast(json(response));
+    }
   });
 });
