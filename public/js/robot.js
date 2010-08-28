@@ -8,6 +8,7 @@ var Robot = function(options) {
   this.offsetX    = 0;
   this.offsetY    = 0;
   this.session_id = options.session_id;
+  this.serial_number = options.serial_number;
 };
 
 Robot.prototype = {

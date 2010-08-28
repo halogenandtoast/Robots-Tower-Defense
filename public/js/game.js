@@ -90,7 +90,7 @@ var Game = {
         }
 
         for (var i = 0, l = message.robots.length; i < l; i++) {
-          setTimeout(function() {
+          (function() {
             var x     = -1;
             var y     = 7;
             var dX    = 1;
@@ -104,16 +104,21 @@ var Game = {
             }
 
             var robot = new Robot({
-              x          : x,
-              y          : y,
-              dX         : dX,
-              image      : image,
-              speed      : message.robots[i].speed,
-              session_id : message.id
-            });
+                x          : x,
+                y          : y,
+                dX         : dX,
+                image      : image,
+                speed      : message.robots[i].speed,
+                serial_number : message.robots[i].serial_number,
+                session_id : message.id
+              });
 
-            Game.map.addRobot(robot);
-          }, 1000 * i);
+            setTimeout(function() {
+              console.log("ROBOT");
+              console.log(robot);
+              Game.map.addRobot(robot);
+            }, 1000 * i);
+          })();
         }
       break;
     }
