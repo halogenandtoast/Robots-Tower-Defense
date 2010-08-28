@@ -1,7 +1,11 @@
-var socketIO = require(__dirname+"/socketIO").socketIO,
-    app = require('express').createServer();
+var express = require('express'),
+    app = express.createServer();
 
-app.get('/', function (req, res) {
+app.configure(function() {
+  app.use(express.staticProvider(__dirname + '/public'));
+});
+
+app.get('/hai', function (req, res) {
   res.send('oh hai');
 });
 
