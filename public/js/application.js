@@ -36,18 +36,11 @@ Game.prototype = {
 
     if (this.socket.connect()) {
       this.onConnect();
-
-      // TEMPORARY
-      var
-      map = new Map();
-      map.addUnit(new Unit(18, 7));
-      map.towers.push(new Tower(5, 5));
-      map.towers.push(new Tower(15, 5));
-      map.towers.push(new Tower(10, 10));
+      this.map = new Map();
 
       setInterval(function() {
-        map.render();
-      }, 1000 / 30);
+        this.map.render();
+      }.bind(this), 1000 / 30);
     }
   },
 
@@ -57,6 +50,39 @@ Game.prototype = {
   },
 
   onMessage: function(message) {
+    message = JSON.parse(message);
+
+    switch (message.action) {
+      case 'unit_created':
+        this.unit_count = message.unit_count;
+      break;
+
+      case 'wave_launched':
+        for (var i = 0, l = message.units.length; i < l; i++) {
+          setTimeout(function() {
+            var x  = -1;
+            var y  = 7;
+            var dX = 1;
+
+            if (message.id != this.socket.transport.sessionid) {
+              x  = 26;
+              y  = 8;
+              dX = -1;
+            }
+
+            var unit = new Unit({
+              x     : x,
+              y     : y,
+              dX    : dX,
+              speed : message.speed
+            });
+
+            this.map.addUnit(unit);
+          }.bind(this), 1000 * i);
+        }
+      break;
+    }
+
     console.log(message);
   },
 
@@ -100,17 +126,21 @@ Map.prototype = {
     this.context.fillStyle = '#444';
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    for (var i = 0, l = this.towers.length; i < l; i++) {
-      var
-      tower = this.towers[i];
-      tower.render(this.context);
-    }
+    /*for (var i = 0, l = this.towers.length; i < l; i++) {
+      var tower = this.towers[i];
+
+      if (tower) {
+        tower.render(this.context);
+      }
+    }*/
 
     for (var i = 0, l = this.units.length; i < l; i++) {
-      var
-      unit = this.units[i];
-      unit.update();
-      unit.render(this.context);
+      var unit = this.units[i];
+
+      if (unit) {
+        unit.update();
+        unit.render(this.context);
+      }
     }
   },
 
@@ -152,12 +182,12 @@ Tower.prototype = {
   }
 };
 
-var Unit = function(x, y) {
-  this.x       = x;
-  this.y       = y;
-  this.dX      = -1;
+var Unit = function(options) {
+  this.x       = options.x;
+  this.y       = options.y;
+  this.dX      = options.dX;
   this.dY      = 0;
-  this.speed   = 2;
+  this.speed   = options.speed;
   this.offsetX = 0;
   this.offsetY = 0;
 };
@@ -185,10 +215,10 @@ Unit.prototype = {
       this.offsetY  = 0;
     }
 
-    if (this.x < 0 || this.y < 0) {
+    if (this.x < -1 || this.y < -1) {
       this.map.removeUnit(this);
     }
   }
 };
 
-new Game();
+var game = new Game();
