@@ -24,14 +24,10 @@ app.listen(port, '0.0.0.0');
 
 server.listen(8024);
 
-
 function invalidRequest(request) {
   return actions.indexOf(request.action) == -1;
 }
 
-function player(client) {
-  return players[client.sessionId];
-}
 socket.on('connection', function(client) {
   game.add_player(client);
 
