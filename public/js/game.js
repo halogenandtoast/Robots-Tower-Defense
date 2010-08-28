@@ -103,13 +103,13 @@ var Game = {
         for (var i = 0, l = message.robots.length; i < l; i++) {
           setTimeout(function() {
             var x     = -1;
-            var y     = 7;
+            var y     = 12;
             var dX    = 1;
             var image = 1;
 
             if (message.id != Game.session_id) {
               x     = 26;
-              y     = 8;
+              y     = 7;
               dX    = -1;
               image = 2;
             }
