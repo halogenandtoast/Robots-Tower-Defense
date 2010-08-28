@@ -80,10 +80,13 @@ var Game = {
 
       case 'tower_created':
         var position = message.position;
-        var x        = 4 + ((position % 20) * 40) - 40;
-        var y        = 125 + (160 * Math.round((position - (position % 20)) / 20));
+        var tower    = new Tower({
+          x : 4 + ((position % 20) * 40) - 40,
+          y : 125 + (160 * Math.round((position - (position % 20)) / 20)),
+          session_id : message.id
+        });
 
-        Game.map.towers.push(new Tower(x, y));
+        Game.map.towers.push(tower);
       break;
 
       case 'robot_created':

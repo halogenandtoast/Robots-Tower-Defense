@@ -1,6 +1,7 @@
-var Tower = function(x, y) {
-  this.x = x;
-  this.y = y;
+var Tower = function(options) {
+  this.x = options.x;
+  this.y = options.y;
+  this.session_id = options.session_id;
 };
 
 Tower.prototype = {
