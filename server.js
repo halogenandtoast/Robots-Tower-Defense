@@ -8,7 +8,12 @@ var express = require('express'),
     json = JSON.stringify,
     log = sys.puts,
     World = require(__dirname+"/lib/world").World,
-    actions = ['create_unit', 'launch_wave', 'lose_life'];
+    actions = [
+      'create_unit',
+      'create_tower',
+      'launch_wave',
+      'lose_life'
+    ];
 
 app.configure(function() {
   app.use(express.staticProvider(__dirname + '/public'));
@@ -53,14 +58,7 @@ socket.on('connection', function(client) {
       return false;
     }
     var player = game.player(client);
-
-    if(request.action == 'create_unit') {
-      player.create_unit();
-    } else if (request.action == 'launch_wave') {
-      player.launch_wave();
-    } else if (request.action == 'lose_life') {
-      player.lose_life();
-    }
+    player[request.action](request);
   });
 
   client.on('disconnect', function() {
