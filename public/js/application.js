@@ -9,64 +9,60 @@ Function.prototype.bind = function(scope) {
 
 
 
-var Game = function() {
-  this.createSocket();
+function $(id) {
+  return document.getElementById(id);
 };
 
-Game.prototype = {
+var Game = {
   bindEventListeners: function() {
-    var $ = function(id) { return document.getElementById(id); };
-
     $('add-unit').addEventListener('click', function(event) {
-      this.addUnit();
+      Game.addUnit();
 
       event.preventDefault();
-    }.bind(this));
+    });
 
     $('launch-wave').addEventListener('click', function(event) {
-      $('unit-count').innerHTML = 0;
-
-      this.launchWave();
+      Game.launchWave();
 
       event.preventDefault();
-    }.bind(this));
+    });
   },
 
-  createSocket: function() {
-    this.socket = new io.Socket(window.location.hostname, { port: 8024 });
-    this.socket.on('message', this.onMessage.bind(this));
+  connect: function() {
+    var
+    socket = new io.Socket(window.location.hostname, { port : 8024 });
+    socket.on('message', Game.onMessage);
 
-    if (this.socket.connect()) {
-      this.onConnect();
-      this.map = new Map();
-      this.map.game = this;
+    if (socket.connect()) {
+      Game.map    = new Map();
+      Game.socket = socket;
+      Game.bindEventListeners();
 
       setInterval(function() {
-        this.map.render();
+        Game.map.render();
       }.bind(this), 1000 / 30);
     }
   },
 
-
-  onConnect: function() {
-    this.bindEventListeners();
-  },
-
   onMessage: function(message) {
+    if (!Game.session_id) {
+      Game.session_id = Game.socket.transport.sessionid;
+    }
+
     message = JSON.parse(message);
 
     switch (message.action) {
       case 'life_lost':
-        if (this.socket.transport.sessionid == message.id) {
-          var element = document.getElementById('health');
-
+        if (Game.session_id == message.id) {
+          var
+          element = $('health');
           element.innerHTML = parseInt(element.innerHTML, 10) - 1;
         }
       break;
 
       case 'unit_created':
-        if (this.socket.transport.sessionid == message.id) {
-          document.getElementById('unit-count').innerHTML = message.unit_count;
+        if (Game.session_id == message.id) {
+          $('unit-count').innerHTML = message.unit_count;
         }
       break;
 
@@ -78,7 +74,7 @@ Game.prototype = {
             var dX    = 1;
             var image = 1;
 
-            if (message.id != this.socket.transport.sessionid) {
+            if (message.id != Game.session_id) {
               x     = 26;
               y     = 8;
               dX    = -1;
@@ -94,8 +90,8 @@ Game.prototype = {
               session_id : message.id
             });
 
-            this.map.addUnit(unit);
-          }.bind(this), 1000 * i);
+            Game.map.addUnit(unit);
+          }, 1000 * i);
         }
       break;
     }
@@ -103,17 +99,17 @@ Game.prototype = {
     console.log(message);
   },
 
-
   addUnit: function() {
-    this.send({ 'action' : 'create_unit' });
+    Game.send({ 'action' : 'create_unit' });
   },
 
   launchWave: function() {
-    this.send({ 'action' : 'launch_wave' });
+    $('unit-count').innerHTML = 0;
+    Game.send({ 'action' : 'launch_wave' });
   },
 
   send: function(data) {
-    this.socket.send(JSON.stringify(data));
+    Game.socket.send(JSON.stringify(data));
   }
 };
 
@@ -253,8 +249,8 @@ Unit.prototype = {
     }
 
     if (this.x < -1 || this.x > 26) {
-      if (this.x < -1 && this.map.game.socket.transport.sessionid != this.session_id) {
-        this.map.game.send({ 'action' : 'lose_life' });
+      if (this.x < -1 && Game.session_id != this.session_id) {
+        Game.send({ 'action' : 'lose_life' });
       }
 
       this.map.removeUnit(this);
@@ -262,4 +258,4 @@ Unit.prototype = {
   }
 };
 
-var game = new Game();
+Game.connect();
