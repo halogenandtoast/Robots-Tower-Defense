@@ -64,7 +64,7 @@ socket.on('connection', function(client) {
 
     if(request.action == 'create_unit') {
       player[client.sessionId]['wave']['units'].push('1');
-
+      relay('unit_created', { unit_count: player[client.sessionId]['wave']['units'].length });
     } else if (request.action == 'launch_wave') {
       relay('wave_launched', player[client.sessionId]['wave'].clone());
     } else if (request.action == 'lose_life') {
