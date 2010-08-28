@@ -59,4 +59,8 @@ socket.on('connection', function(client) {
       player.lose_life();
     }
   });
+
+  client.on('disconnect', function() {
+    game.disconnect(client.sessionId);
+  });
 });
