@@ -17,9 +17,16 @@ var Game = {
     var
     socket = new io.Socket(window.location.hostname, { port : 8024 });
     socket.on('message', Game.onMessage);
+    socket.on('disconnect', Game.onDisconnect);
     socket.connect();
 
     Game.socket = socket;
+  },
+
+  onDisconnect: function() {
+    $('hud').style.display = 'none';
+    $('waiting').style.display = 'block';
+    $('waiting').innerHTML = 'You were disconnected. Reload to play again.';
   },
 
   onReady: function() {
@@ -58,14 +65,9 @@ var Game = {
       break;
 
       case 'game_disbanded':
-        if (Game.session_id == message.id) {
-          $('waiting').innerHTML = 'You were disconnected. Reload to play again.';
-        } else {
-          $('waiting').innerHTML = 'Your opponent disconnected. Reload to play again.';
-        }
-
         $('hud').style.display = 'none';
         $('waiting').style.display = 'block';
+        $('waiting').innerHTML = 'Your opponent disconnected. Reload to play again.';
       break;
 
       case 'life_lost':
