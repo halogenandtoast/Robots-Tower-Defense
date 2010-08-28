@@ -48,6 +48,9 @@ socket.on('connection', function(client) {
     if(!game.ready) {
       log('Can not start yet');
       return false;
+    } else (game.finished) {
+      log('Finished')l
+      return false;
     }
     var player = game.player(client);
 
