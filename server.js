@@ -7,6 +7,7 @@ var express = require('express'),
     socket = io.listen(server),
     json = JSON.stringify,
     log = sys.puts,
+    Player = require(__dirname+'/lib/player').Player,
     actions = ['create_unit', 'launch_wave', 'lose_life'],
     waves = {},
     upgrades = {};
@@ -25,25 +26,6 @@ app.listen(port, '0.0.0.0');
 
 server.listen(8024);
 
-var Wave = function(upgrades) {
-  this.speed = upgrades['speed'];
-  this.units = [];
-}
-
-var Player = function() {
-  this.life = 10;
-  this.upgrades = { 'speed': 1 };
-  this.new_wave();
-};
-
-Player.prototype = {
-  new_wave: function() {
-    this.wave = new Wave(this.upgrades);
-  },
-  lose_life: function() {
-    this.life--;
-  }
-}
 
 function invalidRequest(request) {
   return actions.indexOf(request.action) == -1;
@@ -87,7 +69,7 @@ socket.on('connection', function(client) {
       _player.wave.units.push('1');
       relay(client, 'unit_created', { unit_count: _player.wave.units.length });
     } else if (request.action == 'launch_wave') {
-      wave = _player.wave.clone()
+      wave = _player.wave.hash();
       _player.new_wave();
       relay(client, 'wave_launched', wave);
     } else if (request.action == 'lose_life') {
