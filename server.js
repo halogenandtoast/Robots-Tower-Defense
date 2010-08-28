@@ -10,7 +10,7 @@ var express = require('express'),
     actions = ['create_unit', 'launch_wave', 'lose_life'],
     waves = {},
     upgrades = {};
-    player = {};
+    players = {};
 
 app.configure(function() {
   app.use(express.staticProvider(__dirname + '/public'));
@@ -24,6 +24,26 @@ var port = process.argv.length == 3 ? parseInt(process.argv[2]) : 80
 app.listen(port, '0.0.0.0');
 
 server.listen(8024);
+
+var Wave = function(upgrades) {
+  this.speed = upgrades['speed'];
+  this.units = [];
+}
+
+var Player = function() {
+  this.life = 10;
+  this.upgrades = { 'speed': 1 };
+  this.new_wave();
+};
+
+Player.prototype = {
+  new_wave: function() {
+    this.wave = new Wave(this.upgrades);
+  },
+  lose_life: function() {
+    this.life--;
+  }
+}
 
 function invalidRequest(request) {
   return actions.indexOf(request.action) == -1;
@@ -41,12 +61,11 @@ function relay(client, action, object) {
   client.broadcast(json(response));
 }
 
+function player(client) {
+  return players[client.sessionId];
+}
 socket.on('connection', function(client) {
-  player[client.sessionId] = {
-    life: 10,
-    upgrades: {'speed': 1},
-    wave: {'units': [], 'speed': 1}
-  };
+  players[client.sessionId] = new Player();
 
   client.on('message', function(message) {
     try {
@@ -62,16 +81,18 @@ socket.on('connection', function(client) {
       return false;
     }
 
+    var _player = player(client);
+
     if(request.action == 'create_unit') {
-      player[client.sessionId]['wave']['units'].push('1');
-      relay(client, 'unit_created', { unit_count: player[client.sessionId]['wave']['units'].length });
+      _player.wave.units.push('1');
+      relay(client, 'unit_created', { unit_count: _player.wave.units.length });
     } else if (request.action == 'launch_wave') {
-      wave = player[client.sessionId]['wave'].clone()
-      player[client.sessionId]['wave']['units'] = [];
+      wave = _player.wave.clone()
+      _player.new_wave();
       relay(client, 'wave_launched', wave);
     } else if (request.action == 'lose_life') {
-      player[client.sessionId]['life']--;
-      relay(client, 'life_lost', { life: player[client.sessionId]['life'] });
+      _player.lose_life();
+      relay(client, 'life_lost', { life: _player.life });
     }
   });
 });
