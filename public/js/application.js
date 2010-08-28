@@ -245,7 +245,7 @@ Unit.prototype = {
     }
 
     if (this.x < -1 || this.x > 26) {
-      if (this.map.game.socket.transport.sessionid == this.session_id) {
+      if (this.x < -1 && this.map.game.socket.transport.sessionid != this.session_id) {
         this.map.game.send({ 'action' : 'lose_life' });
       }
 
