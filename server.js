@@ -35,6 +35,12 @@ function createReponse(action, object) {
   return object;
 }
 
+function relay(action, object) {
+  response = createResponse(action, object);
+  client.send(json(response));
+  client.broadcast(json(response));
+}
+
 socket.on('connection', function(client) {
   player[client.sessionId] = {
     life: 10,
@@ -58,15 +64,12 @@ socket.on('connection', function(client) {
 
     if(request.action == 'create_unit') {
       player[client.sessionId]['wave']['units'].push('1');
+
     } else if (request.action == 'launch_wave') {
-      response = createResponse('wave_launched', player[client.sessionId]['wave'].clone());
-      client.send(json(response));
-      client.broadcast(json(response));
+      relay('wave_launched', player[client.sessionId]['wave'].clone());
     } else if (request.action == 'lose_life') {
       player[client.sessionId]['life']--;
-      response = createResponse('life_lost', { life: player[client.sessionId]['life'] });
-      client.send(json(reponse));
-      client.broadcast(json(response));
+      relay('life_lost', { life: player[client.sessionId]['life'] });
     }
   });
 });
