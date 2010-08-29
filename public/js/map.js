@@ -52,8 +52,10 @@ Map.prototype = {
               }
             }
 
-            this.upgradeAt = tower;
-            this.updateTowerUpgrade(x, y, true);
+            if (tower.session_id == Game.session_id) {
+              this.upgradeAt = tower;
+              this.updateTowerUpgrade(x, y, true);
+            }
           }
         }
       }
