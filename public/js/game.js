@@ -246,7 +246,7 @@ var Game = {
               x             : x,
               y             : y + robot.offset,
               dX            : dX,
-              image         : robot.type == 'type1' ? 1 : 2,
+              image         : robot.type == 'type1' ? 2 : 1,
               speed         : robot.speed,
               session_id    : message.id,
               serial_number : robot.serial_number
