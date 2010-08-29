@@ -218,6 +218,13 @@ var Game = {
       case 'robots_upgraded':
         var className = message.robot_type == 'type2' ? '.robot-1-level' : '.robot-2-level';
 
+        if(message.id == Game.session_id) {
+          if(message.robot_type == 'type1') {
+            $('a.upgrade-robot-2 span')[0].innerHTML = '$' + message.upgrade_cost;
+          } else {
+            $('a.upgrade-robot-1 span')[0].innerHTML = '$' + message.upgrade_cost;
+          }
+        }
         if (message.id == Game.map.topPlayer) {
           element = $('#player-1 ' + className + ' span')[0];
         } else {
