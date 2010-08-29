@@ -32,6 +32,17 @@ Tower.prototype = {
       context.drawImage(Tower.imageTop, 0, 0);
       context.restore();
     }
+
+    context.save();
+    context.translate(this.x, this.y);
+
+    if (this.session_id == Game.map.topPlayer) {
+      context.drawImage(Tower.redBadge, 0, 0);
+    } else {
+      context.drawImage(Tower.blueBadge, 0, 0);
+    }
+
+    context.restore();
   },
 
   update: function(context) {
@@ -62,3 +73,8 @@ Tower.imageTop = new Image();
 Tower.imageTop.src = '/images/tower-1-top.png';
 Tower.other = new Image();
 Tower.other.src = '/images/tower-2.png';
+
+Tower.redBadge = new Image();
+Tower.redBadge.src = '/images/red-tag.png';
+Tower.blueBadge = new Image();
+Tower.blueBadge.src = '/images/blue-tag.png';
