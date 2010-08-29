@@ -77,6 +77,12 @@ Map.prototype = {
       }
     }
 
+    for (var i = 0, l = this.robots.length; i < l; i++) {
+      if (this.robots[i]) {
+        this.robots[i].render(this.context);
+      }
+    }
+
     for (var i = 0, l = this.lasers.length; i < l; i++) {
       var laser = this.lasers[i];
       if(laser && laser['ttl'] > 0) {
@@ -90,14 +96,15 @@ Map.prototype = {
           this.context.strokeStyle = "#FF00FF";
           this.context.stroke();
           this.context.restore();
-          laser['ttl']--;
+          if(Game.session_id != this.session_id) {
+            Game.send({
+              'action'              : 'damage_robot',
+              'tower_serial_number' : tower.serial_number,
+              'serial_number'       : robot.serial_number
+            });
         }
-      }
-    }
-
-    for (var i = 0, l = this.robots.length; i < l; i++) {
-      if (this.robots[i]) {
-        this.robots[i].render(this.context);
+        }
+        laser['ttl']--;
       }
     }
 
@@ -111,7 +118,7 @@ Map.prototype = {
         continue;
       }
 
-      if (Math.pow((x - robot.x + 16), 2) + Math.pow((y - robot.y + 16), 2) < Math.pow(radius, 2)) {
+      if (Math.pow((x - robot.x), 2) + Math.pow((y - robot.y), 2) <= Math.pow(radius, 2)) {
         return robot;
       }
     }

@@ -10,6 +10,11 @@ var Tower = function(options) {
 
 Tower.prototype = {
   render: function(context) {
+    context.beginPath();
+    context.arc(this.x + 16, this.y + 16, this.range, 0, Math.PI*2, true);
+    context.closePath();
+    context.fillStyle = "rgba(0,0,0,0.3)"
+    context.fill();
     context.save();
     context.translate(this.x, this.y);
     context.drawImage(Tower.image, 0, 0);
@@ -31,12 +36,6 @@ Tower.prototype = {
 
       if (robot) {
         context.addLaser(this.serial_number, robot.serial_number);
-        Game.send({
-          'action'              : 'damage_robot',
-          'tower_serial_number' : this.serial_number,
-          'serial_number'       : robot.serial_number
-        });
-
       }
     }
   }
