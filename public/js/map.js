@@ -38,8 +38,9 @@ Map.prototype = {
 
     $('#add-tower a')[0].addEventListener('click', function(event) {
       Game.send({
-        'action'   : 'create_tower',
-        'position' : this.active
+        'action'     : 'create_tower',
+        'position'   : this.active,
+        'tower_type' : 'type1'
       });
 
       this.active = undefined;
@@ -48,10 +49,11 @@ Map.prototype = {
 
       event.preventDefault();
     }.bind(this));
-    $('#add-tower a')[0].addEventListener('click', function(event) {
+    $('#add-tower a + a')[0].addEventListener('click', function(event) {
       Game.send({
-        'action'   : 'create_tower',
-        'position' : this.active
+        'action'     : 'create_tower',
+        'position'   : this.active,
+        'tower_type' : 'type2'
       });
 
       this.active = undefined;
