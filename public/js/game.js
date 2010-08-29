@@ -1,4 +1,32 @@
 var Game = {
+  addDialogue: function(html, clearMap) {
+    var
+    dialogue = document.createElement('div');
+    dialogue.innerHTML = html;
+    dialogue.className = 'dialogue';
+
+    if (clearMap) {
+      $('#map a').forEach(function(element) {
+        element.parentNode.removeChild(element);
+      });
+    }
+
+    $('#map')[0].appendChild(dialogue);
+    $('.dialogue')[0].addEventListener('click', function(event) {
+      Game.removeDialogue();
+
+      event.preventDefault();
+    });
+  },
+
+  removeDialogue: function() {
+    var element = $('.dialogue')[0];
+
+    if (element) {
+      element.parentNode.removeChild(element);
+    }
+  },
+
   connect: function() {
     var
     socket = new io.Socket(window.location.hostname, { port : 8024 });
@@ -10,14 +38,17 @@ var Game = {
   },
 
   onDisconnect: function() {
-    $('#waiting')[0].style.display = 'block';
-    $('#waiting')[0].innerHTML = 'You were disconnected. Reload to play again.';
+    var
+    element = $('#map')[0];
+    element.parentNode.removeChild(element);
+
+    Game.removeDialogue();
+    Game.addDialogue('<h2>Disconnected</h2><p>You were disconnected.</p><a href="/">Play Again</a>', true);
   },
 
   onReady: function(top_player_id, bottom_player_id) {
     Game.map = new Map(top_player_id, bottom_player_id);
-
-    $('#waiting')[0].style.display = 'none'
+    Game.removeDialogue();
 
     var player;
     var other;
@@ -65,29 +96,22 @@ var Game = {
         $('.player').forEach(function(element) {
           element.style.display = 'block';
         });
+
+        Game.addDialogue('<img src="/images/help.png"><a href="#">Start</a>');
       break;
 
       case 'game_finished':
         if (Game.session_id == message.id) {
-          $('#waiting')[0].innerHTML = 'You lost! Reload to play again.';
+          Game.addDialogue('<h2>Defeat!</h2><p>You were defeated.</p><a href="/">Play Again</a>', true);
         } else {
-          $('#waiting')[0].innerHTML = 'You won! Reload to play again.';
+          Game.addDialogue('<h2>Victory!</h2><p>You are victorious.</p><a href="/">Play Again</a>', true);
         }
-
-        $('.player').forEach(function(element) {
-          element.style.display = 'none';
-        });
-
-        $('#waiting')[0].style.display = 'block';
       break;
 
       case 'game_disbanded':
-        $('.player').forEach(function(element) {
-          element.style.display = 'none';
-        });
+        Game.removeDialogue();
 
-        $('#waiting')[0].style.display = 'block';
-        $('#waiting')[0].innerHTML = 'Your opponent disconnected. Reload to play again.';
+        Game.addDialogue('<h2>Victory!</h2><p>Your opponent disconnected.</p><a href="/">Play Again</a>', true);
       break;
 
       case 'life_lost':
