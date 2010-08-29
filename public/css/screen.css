@@ -80,7 +80,9 @@ canvas {
 }
 
 .player .add-robot-1,
-.player .add-robot-2 {
+.player .add-robot-2,
+.player .upgrade-robot-1,
+.player .upgrade-robot-2 {
   position: absolute;
   width: 34px;
   height: 34px;
@@ -142,6 +144,16 @@ canvas {
   left: 158px;
 }
 
+#player-1 .upgrade-robot-1 {
+  top: 4px;
+  left: 196px;
+}
+
+#player-1 .upgrade-robot-2 {
+  top: 42px;
+  left: 196px;
+}
+
 #player-1 .launch-wave {
   right: 6px;
   bottom: 6px;
@@ -180,6 +192,16 @@ canvas {
 #player-2 .add-robot-2 {
   top: 42px;
   left: 72px;
+}
+
+#player-2 .upgrade-robot-1 {
+  top: 2px;
+  left: 112px;
+}
+
+#player-2 .upgrade-robot-2 {
+  top: 42px;
+  left: 112px;
 }
 
 #player-2 .launch-wave {

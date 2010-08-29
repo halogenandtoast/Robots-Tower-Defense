@@ -13,7 +13,8 @@ var express = require('express'),
       'create_tower',
       'launch_wave',
       'damage_robot',
-      'lose_life'
+      'lose_life',
+      'upgrade_robots'
     ];
 
 app.configure(function() {

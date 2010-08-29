@@ -71,6 +71,16 @@ var Game = {
       event.preventDefault();
     });
 
+    $('.upgrade-robot-1', player)[0].addEventListener('click', function(event) {
+      Game.upgradeRobot('type1');
+      event.preventDefault();
+    });
+
+    $('.upgrade-robot-2', player)[0].addEventListener('click', function(event) {
+      Game.upgradeRobot('type2');
+      event.preventDefault();
+    });
+
     $('.launch-wave', player)[0].addEventListener('click', function(event) {
       Game.launchWave();
       event.preventDefault();
@@ -221,6 +231,10 @@ var Game = {
 
   addRobot: function(type) {
     Game.send({ 'action' : 'create_robot', 'robot_type' : type });
+  },
+
+  upgradeRobot: function(type) {
+    Game.send({ 'action' : 'upgrade_robots', 'robot_type' : type });
   },
 
   launchWave: function() {
