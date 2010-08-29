@@ -15,13 +15,13 @@ Robot.prototype = {
     context.save();
 
     if (this.image == 2) {
-      context.translate(this.x, this.y);
+      context.translate(this.x+ 16, this.y + 16);
       context.rotate(Math.PI);
     } else {
-      context.translate(this.x, this.y);
+      context.translate(this.x + 16, this.y + 16);
     }
 
-    context.drawImage(this.map.images[this.image], 0, 0);
+    context.drawImage(this.map.images[this.image], -16, -16);
     context.restore();
   },
 

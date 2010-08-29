@@ -1,7 +1,7 @@
 var Tower = function(options) {
   this.x      = options.x;
   this.y      = options.y;
-  this.rate   = options.rate   || 1;
+  this.rate   = options.rate   || 0.75;
   this.range  = options.range  || 96;
   this.damage = options.damage || 1;
   this.session_id = options.session_id;
@@ -30,12 +30,12 @@ Tower.prototype = {
       var robot = Game.map.findRobotIn(this.x, this.y, this.range, this.session_id);
 
       if (robot) {
+        context.addLaser(this.serial_number, robot.serial_number);
         Game.send({
           'action'              : 'damage_robot',
           'tower_serial_number' : this.serial_number,
           'serial_number'       : robot.serial_number
         });
-        context.addLaser(this, robot);
 
       }
     }

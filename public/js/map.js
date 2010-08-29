@@ -1,6 +1,8 @@
-var Map = function() {
+var Map = function(topPlayerId, bottomPlayerId) {
   this.loadImages();
   this.createCanvas();
+  this.topPlayer = topPlayerId;
+  this.bottomPlayer = bottomPlayerId;
 };
 
 Map.prototype = {
@@ -38,39 +40,54 @@ Map.prototype = {
     this.images[2].src = '/images/robot-2.png';
   },
 
+  cycle: function() {
+    this.update();
+    this.render();
+  },
+
+  update: function() {
+    for(var i = 0, l = this.towers.length; i < l; i++) {
+      if(this.towers[i]) {
+        this.towers[i].update(this);
+      }
+    }
+    for (var i = 0, l = this.robots.length; i < l; i++) {
+      if (this.robots[i]) {
+        this.robots[i].update();
+      }
+    }
+  },
+
   render: function() {
     this.context.drawImage(this.images[0], 0, 0);
 
     for (var i = 0, l = this.towers.length; i < l; i++) {
-      var tower = this.towers[i];
-
-      if (tower) {
-        tower.update(this);
-        tower.render(this.context);
+      if (this.towers[i]) {
+        this.towers[i].render(this.context);
       }
     }
 
     for (var i = 0, l = this.lasers.length; i < l; i++) {
       var laser = this.lasers[i];
       if(laser && laser['ttl'] > 0) {
-        this.context.save();
-        this.context.beginPath();
-        console.log("L FX:"+laser['from'].x+" FY:"+laser['from'].y+" TX:"+laser['to'].x+" TY:"+laser['to'].y);
-        this.context.moveTo(laser['from'].x, laser['from'].y);
-        this.context.lineTo(laser['to'].x, laser['to'].y);
-        this.context.strokeStyle = "#00FF00";
-        this.context.stroke();
-        this.context.restore();
-        laser['ttl']--;
+        var tower = this.towerBySerialNumber(laser['from']);
+        var robot = this.robotBySerialNumber(laser['to']);
+        if(tower && robot) {
+          this.context.save();
+          this.context.beginPath();
+          this.context.moveTo(tower.x + 16, tower.y + 16);
+          this.context.lineTo(robot.x + 16, robot.y + 16);
+          this.context.strokeStyle = "#FF00FF";
+          this.context.stroke();
+          this.context.restore();
+          laser['ttl']--;
+        }
       }
     }
 
     for (var i = 0, l = this.robots.length; i < l; i++) {
-      var robot = this.robots[i];
-
-      if (robot) {
-        robot.update();
-        robot.render(this.context);
+      if (this.robots[i]) {
+        this.robots[i].render(this.context);
       }
     }
 
@@ -105,8 +122,8 @@ Map.prototype = {
     this.robots.push(robot);
   },
 
-  addLaser: function(tower, robot) {
-    var laser = { 'from': { 'x': tower.x + 16, 'y': tower.y + 16 }, 'to': { 'x': robot.x + 16, 'y': robot.y + 16 }, 'ttl': 10 };
+  addLaser: function(tower_sn, robot_sn) {
+    var laser = { 'from': tower_sn, 'to': robot_sn, 'ttl': 100 };
     this.lasers.push(laser);
   },
 
@@ -115,6 +132,22 @@ Map.prototype = {
       if (this.robots[i].serial_number == serial_number) {
         this.robots.splice(i, 1);
         break;
+      }
+    }
+  },
+
+  robotBySerialNumber: function(serial_number) {
+    for (var i = 0, l = this.robots.length; i < l; i++) {
+      if (this.robots[i].serial_number == serial_number) {
+        return this.robots[i];
+      }
+    }
+  },
+
+  towerBySerialNumber: function(serial_number) {
+    for (var i = 0, l = this.towers.length; i < l; i++) {
+      if (this.towers[i].serial_number == serial_number) {
+        return this.towers[i];
       }
     }
   }

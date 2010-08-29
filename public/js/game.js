@@ -29,15 +29,17 @@ var Game = {
     $('waiting').innerHTML = 'You were disconnected. Reload to play again.';
   },
 
-  onReady: function() {
-    Game.map    = new Map();
+  onReady: function(top_player_id, bottom_player_id) {
+    console.log(top_player_id);
+    console.log(bottom_player_id);
+    Game.map    = new Map(top_player_id, bottom_player_id);
     Game.bindEventListeners();
 
     $('hud').style.display = 'block';
     $('waiting').style.display = 'none'
 
     setInterval(function() {
-      Game.map.render();
+      Game.map.cycle();
     }.bind(this), 1000 / 30);
   },
 
@@ -50,7 +52,7 @@ var Game = {
 
     switch (message.action) {
       case 'game_ready':
-        Game.onReady();
+        Game.onReady(message.top_player_id, message.bottom_player_id);
       break;
 
       case 'game_finished':
@@ -108,13 +110,13 @@ var Game = {
         for (var i = 0, l = message.robots.length; i < l; i++) {
           (function() {
             var x     = -1;
-            var y     = 350;
+            var y     = 360;
             var dX    = 1;
             var image = 1;
 
-            if (message.id != Game.session_id) {
+            if (message.id != Game.map.bottomPlayer) {
               x     = 801;
-              y     = 250;
+              y     = 200;
               dX    = -1;
               image = 2;
             }
