@@ -141,7 +141,8 @@ var Game = {
           session_id : message.id,
           serial_number: message.serial_number,
           rate: message.rate,
-          range: message.range
+          range: message.range,
+          image: message.tower_type == 'type1' ? 1 : 2
         });
         Game.map.addTower(tower, position);
       break;

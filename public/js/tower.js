@@ -4,6 +4,7 @@ var Tower = function(options) {
   this.rate   = options.rate   || 0.75;
   this.range  = options.range  || 96;
   this.angle  = 90;
+  this.image  = options.image;
   this.damage = options.damage || 1;
   this.session_id = options.session_id;
   this.serial_number = options.serial_number;
@@ -18,16 +19,19 @@ Tower.prototype = {
     context.fill();
     context.save();
     context.translate(this.x, this.y);
-    context.drawImage(Tower.imageBottom, 0, 0);
+    context.drawImage(this.image == 1 ? Tower.imageBottom : Tower.other, 0, 0);
     context.restore();
-    context.save();
-    context.translate(this.x, this.y);
-    context.translate(0.6274169979695223, 0.6274169979695223);
-    context.translate(16, 16);
-    context.rotate(this.angle * Math.PI / 180);
-    context.translate(-16,-16);
-    context.drawImage(Tower.imageTop, 0, 0);
-    context.restore();
+
+    if (this.image == 1) {
+      context.save();
+      context.translate(this.x, this.y);
+      context.translate(0.6274169979695223, 0.6274169979695223);
+      context.translate(16, 16);
+      context.rotate(this.angle * Math.PI / 180);
+      context.translate(-16,-16);
+      context.drawImage(Tower.imageTop, 0, 0);
+      context.restore();
+    }
   },
 
   update: function(context) {
@@ -56,3 +60,5 @@ Tower.imageBottom = new Image();
 Tower.imageBottom.src = '/images/tower-1.png';
 Tower.imageTop = new Image();
 Tower.imageTop.src = '/images/tower-1-top.png';
+Tower.other = new Image();
+Tower.other.src = '/images/tower-2.png';
