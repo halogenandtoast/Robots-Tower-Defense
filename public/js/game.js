@@ -223,6 +223,8 @@ var Game = {
         } else {
           $('#player-2 .cash')[0].innerHTML = '$' + message.amount;
         }
+      case 'fired_laser':
+        Game.map.addLaser(message.tower_sn, message.robot_sn);
       break;
     }
 

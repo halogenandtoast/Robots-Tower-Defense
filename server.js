@@ -15,7 +15,8 @@ var express = require('express'),
       'damage_robot',
       'lose_life',
       'upgrade_tower',
-      'upgrade_robots'
+      'upgrade_robots',
+      'fire'
     ];
 
 app.configure(function() {

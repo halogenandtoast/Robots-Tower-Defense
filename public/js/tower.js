@@ -49,8 +49,8 @@ Tower.prototype = {
 
       if (now - this.last_update > delay) {
         this.last_update = now;
-
-        Game.map.addLaser(this.serial_number, this.target.serial_number);
+        Game.send({action: 'fire', tower_sn: this.serial_number, robot_sn: this.target.serial_number})
+        // Game.map.addLaser(this.serial_number, this.target.serial_number);
       }
     }
   }
