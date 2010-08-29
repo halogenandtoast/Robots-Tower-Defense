@@ -180,6 +180,7 @@ var Game = {
             tower.damage = message.damage;
             tower.level = message.level;
             tower.upgrade_cost = message.upgrade_cost;
+            tower.drawRange = true;
             break;
           }
         }

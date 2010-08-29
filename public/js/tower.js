@@ -10,15 +10,26 @@ var Tower = function(options) {
   this.session_id = options.session_id;
   this.upgrade_cost  = options.upgrade_cost;
   this.serial_number = options.serial_number;
+  this.opacity   = 0.75;
+  this.drawRange = true;
 };
 
 Tower.prototype = {
   render: function(context) {
-    context.beginPath();
-    context.arc(this.x + 16, this.y + 16, this.range, 0, Math.PI*2, true);
-    context.closePath();
-    context.fillStyle = "rgba(0,0,0,0.3)"
-    context.fill();
+    if (this.drawRange) {
+      context.beginPath();
+      context.arc(this.x + 16, this.y + 16, this.range, 0, Math.PI*2, true);
+      context.closePath();
+      context.fillStyle = "rgba(0,0,0," + this.opacity + ")"
+      context.fill();
+
+      this.opacity -= 0.01;
+
+      if (this.opacity <= 0) {
+        this.opacity   = 0.75;
+        this.drawRange = false;
+      }
+    }
 
     context.save();
     context.translate(this.x, this.y);
