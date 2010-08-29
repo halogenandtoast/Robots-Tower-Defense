@@ -58,7 +58,6 @@ Map.prototype = {
             element.style.top  = (y - 119) + 'px';
             element.style.left = (x - 4) + 'px';
 
-            $('a', element).className = '';
             $('h2 span', element)[0].innerHTML = tower.level + 1;
             $('.range span', element)[0].innerHTML = '+1'; // + (tower.rate + 1);
             $('.damage span', element)[0].innerHTML = '+1'; // + (tower.damage + 1);
@@ -73,8 +72,10 @@ Map.prototype = {
               cash = parseInt($('#player-2 .cash')[0].innerText.replace('$', ''), 10);
             }
 
-            if (tower.upgrade_cost > cash) {
+            if (cash < tower.upgrade_cost) {
               $('a', element)[0].className = 'disabled';
+            } else {
+              $('a', element)[0].className = '';
             }
 
             element.style.display = 'block';

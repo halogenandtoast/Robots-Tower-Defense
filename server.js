@@ -69,3 +69,11 @@ socket.on('connection', function(client) {
     game.disconnect(client.sessionId);
   });
 });
+
+setInterval(function() {
+  World.games.forEach(function(game) {
+    game.players.forEach(function(player) {
+      player.cash_received({ amount : 10 });
+    });
+  });
+}, 5000);
