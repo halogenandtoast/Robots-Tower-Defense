@@ -119,9 +119,14 @@ var Game = {
           element.style.display = 'block';
         });
 
-
         $('#player-1 .cash')[0].innerHTML = '$' + message.cash;
         $('#player-2 .cash')[0].innerHTML = '$' + message.cash;
+
+        if (Game.session_id == message.top_player_id) {
+          $('#opponent-dashboard')[0].className = 'bottom';
+        } else {
+          $('#opponent-dashboard')[0].className = 'top';
+        }
 
         Game.robots = message.robots;
         Game.towers = message.towers;
