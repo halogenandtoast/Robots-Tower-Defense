@@ -11,7 +11,6 @@ var Robot = function(options) {
 
 Robot.prototype = {
   render: function(context) {
-
     context.save();
 
     if (this.image == 2) {
