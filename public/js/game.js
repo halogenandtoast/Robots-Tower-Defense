@@ -38,10 +38,6 @@ var Game = {
   },
 
   onDisconnect: function() {
-    var
-    element = $('#map')[0];
-    element.parentNode.removeChild(element);
-
     Game.removeDialogue();
     Game.addDialogue('<h2>Disconnected</h2><p>You were disconnected.</p><a href="/">Play Again</a>', true);
   },
