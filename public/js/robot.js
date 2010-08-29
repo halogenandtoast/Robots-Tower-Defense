@@ -29,8 +29,8 @@ Robot.prototype = {
     this.x = this.x + (this.speed * this.dX);
     this.y = this.y + (this.speed * this.dY);
 
-    if (this.x < -1 || this.x > 860) {
-      if (this.x < -1 && Game.session_id != this.session_id) {
+    if (this.x < -1 || this.x > 800) {
+      if (Game.session_id != this.session_id) {
         Game.send({ 'action' : 'lose_life' });
       }
 
