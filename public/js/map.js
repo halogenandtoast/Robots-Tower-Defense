@@ -55,15 +55,29 @@ Map.prototype = {
 
             var
             element = $('#upgrade-tower')[0];
-            element.style.display = 'block';
             element.style.top  = (y - 119) + 'px';
             element.style.left = (x - 4) + 'px';
 
+            $('a', element).className = '';
             $('h2 span', element)[0].innerHTML = tower.level + 1;
             $('.range span', element)[0].innerHTML = '+1'; // + (tower.rate + 1);
             $('.damage span', element)[0].innerHTML = '+1'; // + (tower.damage + 1);
             $('.rate span', element)[0].innerHTML = '+1.25'; // + (tower.range * 1.25);
             $('.cost', element)[0].innerHTML = '$' + tower.upgrade_cost;
+
+            var cash;
+
+            if (Game.session_id == Game.map.topPlayer) {
+              cash = parseInt($('#player-1 .cash')[0].innerText.replace('$', ''), 10);
+            } else {
+              cash = parseInt($('#player-2 .cash')[0].innerText.replace('$', ''), 10);
+            }
+
+            if (tower.upgrade_cost > cash) {
+              $('a', element)[0].className = 'disabled';
+            }
+
+            element.style.display = 'block';
           }
         }
       }
