@@ -142,17 +142,15 @@ var Game = {
       break;
 
       case 'life_lost':
-        if (Game.session_id == message.id) {
-          var element;
+        var element;
 
-          if (message.id == Game.map.topPlayer) {
-            element = $('#player-1 .lives')[0];
-          } else {
-            element = $('#player-2 .lives')[0];
-          }
-
-          element.innerHTML = parseInt(element.innerHTML, 10) - 1;
+        if (message.id == Game.map.topPlayer) {
+          element = $('#player-1 .lives')[0];
+        } else {
+          element = $('#player-2 .lives')[0];
         }
+
+        element.innerHTML = parseInt(element.innerHTML, 10) - 1;
       break;
 
       case 'tower_created':
