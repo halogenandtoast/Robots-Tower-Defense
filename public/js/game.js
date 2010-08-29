@@ -273,10 +273,13 @@ var Game = {
         }
 
         Game.map.updateTowerUpgrade();
+        break;
       case 'fired_laser':
         Game.map.addLaser(message.tower_sn, message.robot_sn);
+        break;
       case 'fired_seeker':
         Game.map.addSeeker(message.tower_sn, message.robot_sn);
+        break;
       break;
     }
 

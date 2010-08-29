@@ -184,9 +184,11 @@ Map.prototype = {
           if(length > 2) {
             dX = dX/length;
             dY = dY/length;
-            this.seekers[i].angle = Math.acos(dY);
-            this.seekers[i].x = this.seekers[i].x + (2 * dX);
-            this.seekers[i].y = this.seekers[i].y + (2 * dY);
+            this.seekers[i].dX = dX;
+            this.seekers[i].dY = dY;
+            this.seekers[i].x = this.seekers[i].x + (this.seekers[i].speed * dX);
+            this.seekers[i].y = this.seekers[i].y + (this.seekers[i].speed * dY);
+            this.seekers[i].speed = this.seekers[i].speed * 1.005;
           } else {
             if(Game.session_id != robot.session_id) {
               Game.send({
@@ -198,6 +200,8 @@ Map.prototype = {
             this.seekers.splice(i, 1);
             i--;
           }
+        } else {
+          this.seekers.splice(i, 1);
         }
       }
     }
@@ -257,11 +261,7 @@ Map.prototype = {
 
     for(var i = 0, l = this.seekers.length; i < l; i++) {
       var seeker = this.seekers[i];
-      this.context.save();
-      this.context.translate(seeker.x + 3, seeker.y + 4);
-      this.context.rotate(-seeker.angle + Math.PI);
-      this.context.drawImage(Map.images[50], -3, -4);
-      this.context.restore();
+      this.context.drawImage(Map.images[50], seeker.x, seeker.y);
     }
 
     if (this.buildAt) {
@@ -309,7 +309,12 @@ Map.prototype = {
   addSeeker: function(tower_sn, robot_sn) {
     var tower = this.towerBySerialNumber(tower_sn)
     if(tower) {
-      var seeker = { angle: 0, x: tower.x + 16, y: tower.y + 16, tower_sn: tower_sn, tracking: robot_sn };
+      var dX = (robot.x + 16) - (tower.x + 11);
+      var dY = (robot.y + 16) - (tower.y + 11);
+      var length = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+      dX = dX/length;
+      dY = dY/length;
+      var seeker = { dX: dX, dY: dY, speed: 2, x: tower.x + 11, y: tower.y + 11, tower_sn: tower_sn, tracking: robot_sn };
       this.seekers.push(seeker);
     }
   },
@@ -357,4 +362,4 @@ Map.images[10].src = '/images/active-tower-slot.png';
 Map.images[20] = new Image();
 Map.images[20].src = '/images/x-tower.png';
 Map.images[50] = new Image();
-Map.images[50].src = '/images/projectile.png';
+Map.images[50].src = '/images/orb.png';
