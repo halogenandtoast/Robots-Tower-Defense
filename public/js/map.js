@@ -201,7 +201,12 @@ Map.prototype = {
             i--;
           }
         } else {
-          this.seekers.splice(i, 1);
+          this.seekers[i].x = this.seekers[i].x + (this.seekers[i].speed * this.seekers[i].dX);
+          this.seekers[i].y = this.seekers[i].y + (this.seekers[i].speed * this.seekers[i].dY);
+          this.seekers[i].speed = this.seekers[i].speed * 1.005;
+          if(this.seekers[i].x < -10 || this.seekers[i].x > 810) {
+            this.seekers.splice(i, 1);
+          }
         }
       }
     }
@@ -308,7 +313,8 @@ Map.prototype = {
 
   addSeeker: function(tower_sn, robot_sn) {
     var tower = this.towerBySerialNumber(tower_sn)
-    if(tower) {
+    var robot = this.robotBySerialNumber(robot_sn)
+    if(tower && robot) {
       var dX = (robot.x + 16) - (tower.x + 11);
       var dY = (robot.y + 16) - (tower.y + 11);
       var length = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
