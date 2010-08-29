@@ -23,8 +23,8 @@ var Game = {
       Game.removeDialogue();
       if(callback) {
         callback();
+        event.preventDefault();
       }
-      event.preventDefault();
     });
   },
 
