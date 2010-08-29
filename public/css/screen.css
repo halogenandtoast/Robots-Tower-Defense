@@ -198,3 +198,9 @@ canvas {
   padding-top: 84px;
   text-align: center;
 }
+
+.dialogue img {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

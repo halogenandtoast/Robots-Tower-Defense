@@ -12,6 +12,11 @@ var Game = {
     }
 
     $('#map')[0].appendChild(dialogue);
+    $('.dialogue')[0].addEventListener('click', function(event) {
+      Game.removeDialogue();
+
+      event.preventDefault();
+    });
   },
 
   removeDialogue: function() {
@@ -91,6 +96,8 @@ var Game = {
         $('.player').forEach(function(element) {
           element.style.display = 'block';
         });
+
+        Game.addDialogue('<img src="/images/help.png"><a href="#">Start</a>');
       break;
 
       case 'game_finished':
