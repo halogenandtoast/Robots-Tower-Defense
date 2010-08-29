@@ -8,6 +8,7 @@ var Map = function(topPlayerId, bottomPlayerId) {
 };
 
 Map.prototype = {
+  active    : undefined,
   robots    : [],
   towers    : [],
   lasers    : [],
@@ -22,11 +23,42 @@ Map.prototype = {
       var position = 1 + Math.floor(x / 40) + (20 * Math.floor((y - 117) / 160));
 
       if (y >= 117 && y <= 477 && this.positions[position]) {
-        Game.send({
-          'action'   : 'create_tower',
-          'position' : position
-        });
+        var x = 4 + (((position - 1) % 20) * 40);
+        var y = 125 + (160 * Math.round((position - ((position - 1) % 20)) / 20));
+
+        this.active = position;
+
+        var
+        element = $('#add-tower')[0];
+        element.style.display = 'block';
+        element.style.top  = (y - 44) + 'px';
+        element.style.left = (x - 4) + 'px';
       }
+    }.bind(this));
+
+    $('#add-tower a')[0].addEventListener('click', function(event) {
+      Game.send({
+        'action'   : 'create_tower',
+        'position' : this.active
+      });
+
+      this.active = undefined;
+
+      $('#add-tower')[0].style.display = 'none';
+
+      event.preventDefault();
+    }.bind(this));
+    $('#add-tower a')[0].addEventListener('click', function(event) {
+      Game.send({
+        'action'   : 'create_tower',
+        'position' : this.active
+      });
+
+      this.active = undefined;
+
+      $('#add-tower')[0].style.display = 'none';
+
+      event.preventDefault();
     }.bind(this));
   },
 
@@ -38,6 +70,9 @@ Map.prototype = {
     this.images[1].src = '/images/robot-1.png';
     this.images[2] = new Image();
     this.images[2].src = '/images/robot-2.png';
+
+    this.images[100] = new Image();
+    this.images[100].src = '/images/active-tower-slot.png';
   },
 
   setupPositions: function() {
@@ -105,6 +140,12 @@ Map.prototype = {
       }
     }
 
+    if (this.active) {
+      var x = 4 + (((this.active - 1) % 20) * 40);
+      var y = 125 + (160 * Math.round((this.active - ((this.active - 1) % 20)) / 20));
+
+      this.context.drawImage(this.images[100], x, y);
+    }
   },
 
   findRobotIn: function(x, y, radius, session_id) {
