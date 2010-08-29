@@ -6,6 +6,7 @@ var Map = function() {
 Map.prototype = {
   robots : [],
   towers : [],
+  lasers: [],
 
   createCanvas: function() {
     this.body    = document.getElementsByTagName('body')[0];
@@ -44,8 +45,23 @@ Map.prototype = {
       var tower = this.towers[i];
 
       if (tower) {
-        tower.update();
+        tower.update(this);
         tower.render(this.context);
+      }
+    }
+
+    for (var i = 0, l = this.lasers.length; i < l; i++) {
+      var laser = this.lasers[i];
+      if(laser && laser['ttl'] > 0) {
+        this.context.save();
+        this.context.beginPath();
+        console.log("L FX:"+laser['from'].x+" FY:"+laser['from'].y+" TX:"+laser['to'].x+" TY:"+laser['to'].y);
+        this.context.moveTo(laser['from'].x, laser['from'].y);
+        this.context.lineTo(laser['to'].x, laser['to'].y);
+        this.context.strokeStyle = "#00FF00";
+        this.context.stroke();
+        this.context.restore();
+        laser['ttl']--;
       }
     }
 
@@ -57,6 +73,7 @@ Map.prototype = {
         robot.render(this.context);
       }
     }
+
   },
 
   findRobotIn: function(x, y, radius, session_id) {
@@ -67,13 +84,7 @@ Map.prototype = {
         continue;
       }
 
-      var rX = (robot.x * 32) + robot.offsetX - 16;
-      var rY = (robot.y * 32) + robot.offsetY - 16;
-
-      x += 16;
-      y += 16;
-
-      if (Math.pow((x - rX), 2) + Math.pow((y - rY), 2) < Math.pow(radius, 2)) {
+      if (Math.pow((x - robot.x + 32), 2) + Math.pow((y - robot.y + 32), 2) < Math.pow(radius, 2)) {
         return robot;
       }
     }
@@ -92,6 +103,11 @@ Map.prototype = {
     robot.map = this;
 
     this.robots.push(robot);
+  },
+
+  addLaser: function(tower, robot) {
+    var laser = { 'from': { 'x': tower.x + 16, 'y': tower.y + 16 }, 'to': { 'x': robot.x + 16, 'y': robot.y + 16 }, 'ttl': 10 };
+    this.lasers.push(laser);
   },
 
   removeRobotBySerialNumber: function(serial_number) {

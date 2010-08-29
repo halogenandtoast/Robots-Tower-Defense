@@ -5,6 +5,7 @@ var Tower = function(options) {
   this.range  = options.range  || 96;
   this.damage = options.damage || 1;
   this.session_id = options.session_id;
+  this.serial_number = options.serial_number;
 };
 
 Tower.prototype = {
@@ -15,7 +16,7 @@ Tower.prototype = {
     context.restore();
   },
 
-  update: function() {
+  update: function(context) {
     if (!this.last_update) {
       this.last_update = (new Date()).getTime();
     }
@@ -30,9 +31,12 @@ Tower.prototype = {
 
       if (robot) {
         Game.send({
-          'action'        : 'damage_robot',
-          'serial_number' : robot.serial_number
+          'action'              : 'damage_robot',
+          'tower_serial_number' : this.serial_number,
+          'serial_number'       : robot.serial_number
         });
+        context.addLaser(this, robot);
+
       }
     }
   }

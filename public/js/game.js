@@ -83,7 +83,8 @@ var Game = {
         var tower    = new Tower({
           x : 4 + ((position % 20) * 40) - 40,
           y : 125 + (160 * Math.round((position - (position % 20)) / 20)),
-          session_id : message.id
+          session_id : message.id,
+          serial_number: message.serial_number
         });
 
         Game.map.towers.push(tower);
@@ -107,13 +108,13 @@ var Game = {
         for (var i = 0, l = message.robots.length; i < l; i++) {
           (function() {
             var x     = -1;
-            var y     = 12;
+            var y     = 350;
             var dX    = 1;
             var image = 1;
 
             if (message.id != Game.session_id) {
-              x     = 26;
-              y     = 7;
+              x     = 801;
+              y     = 250;
               dX    = -1;
               image = 2;
             }
