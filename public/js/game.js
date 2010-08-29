@@ -210,7 +210,7 @@ var Game = {
       break;
 
       case 'robots_upgraded':
-        var className = message.type == 'type1' ? '.robot-1-level' : '.robot-2-level';
+        var className = message.robot_type == 'type1' ? '.robot-1-level' : '.robot-2-level';
 
         if (message.id == Game.map.topPlayer) {
           element = $('#player-1 ' + className + ' span')[0];
