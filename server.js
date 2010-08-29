@@ -14,6 +14,7 @@ var express = require('express'),
       'launch_wave',
       'damage_robot',
       'lose_life',
+      'upgrade_tower',
       'upgrade_robots'
     ];
 
