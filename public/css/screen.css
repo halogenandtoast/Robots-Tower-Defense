@@ -89,6 +89,20 @@ canvas {
   display: block;
 }
 
+.player .robot-1-level,
+.player .robot-2-level {
+  position: absolute;
+  width: 36px;
+  text-align: center;
+  font: 11px Helvetica, Arial, Sans-serif;
+  display: block;
+}
+
+.player .robot-1-level span,
+.player .robot-2-level span {
+  display: block;
+}
+
 .player .launch-wave {
   position: absolute;
   background: url(/images/green-button.png);
@@ -154,6 +168,16 @@ canvas {
   left: 196px;
 }
 
+#player-1 .robot-1-level {
+  top: 8px;
+  left: 228px;
+}
+
+#player-1 .robot-2-level {
+  top: 48px;
+  left: 228px;
+}
+
 #player-1 .launch-wave {
   right: 6px;
   bottom: 6px;
@@ -202,6 +226,16 @@ canvas {
 #player-2 .upgrade-robot-2 {
   top: 42px;
   left: 112px;
+}
+
+#player-2 .robot-1-level {
+  top: 8px;
+  left: 141px;
+}
+
+#player-2 .robot-2-level {
+  top: 48px;
+  left: 141px;
 }
 
 #player-2 .launch-wave {

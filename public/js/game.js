@@ -175,6 +175,18 @@ var Game = {
         Game.map.removeRobotBySerialNumber(message.serial_number);
       break;
 
+      case 'robots_upgraded':
+        var className = message.robot_type == 'type1' ? '.robot-1-level' : '.robot-2-level';
+
+        if (message.id == Game.map.topPlayer) {
+          element = $('#player-1 ' + className + ' span')[0];
+        } else {
+          element = $('#player-2 ' + className + ' span')[0];
+        }
+
+        element.innerHTML = message.level;
+      break;
+
       case 'wave_launched':
         var elements;
 
