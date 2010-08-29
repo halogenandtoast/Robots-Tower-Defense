@@ -12,6 +12,7 @@ Map.prototype = {
   robots    : [],
   towers    : [],
   lasers    : [],
+  seekers   : [],
   positions : [],
 
   setupCanvas: function() {
@@ -173,6 +174,33 @@ Map.prototype = {
         this.robots[i].update();
       }
     }
+    for (var i = 0, l = this.seekers.length; i < l; i++) {
+      if (this.seekers[i]) {
+        var robot = this.robotBySerialNumber(this.seekers[i].tracking);
+        if(robot) {
+          var dX = (robot.x + 16) - this.seekers[i].x;
+          var dY = (robot.y + 16) - this.seekers[i].y;
+          var length = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+          if(length > 2) {
+            dX = dX/length;
+            dY = dY/length;
+            this.seekers[i].angle = Math.acos(dY);
+            this.seekers[i].x = this.seekers[i].x + (2 * dX);
+            this.seekers[i].y = this.seekers[i].y + (2 * dY);
+          } else {
+            if(Game.session_id != this.session_id) {
+              Game.send({
+                  'action'              : 'damage_robot',
+                  'tower_serial_number' : this.seekers[i].tower_sn,
+                  'serial_number'       : robot.serial_number
+                });
+            }
+            this.seekers.splice(i, 1);
+            i--;
+          }
+        }
+      }
+    }
   },
 
   render: function() {
@@ -227,6 +255,16 @@ Map.prototype = {
       }
     }
 
+    for(var i = 0, l = this.seekers.length; i < l; i++) {
+      var seeker = this.seekers[i];
+      this.context.save();
+      this.context.translate(seeker.x + 3, seeker.y + 4);
+      alert(seeker.angle);
+      this.context.rotate(-seeker.angle + Math.PI);
+      this.context.drawImage(Map.images[50], -3, -4);
+      this.context.restore();
+    }
+
     if (this.buildAt) {
       var x = 4 + (((this.buildAt - 1) % 20) * 40);
       var y = 125 + (160 * Math.round((this.buildAt - ((this.buildAt - 1) % 20)) / 20));
@@ -267,6 +305,14 @@ Map.prototype = {
   addLaser: function(tower_sn, robot_sn) {
     var laser = { 'from': tower_sn, 'to': robot_sn, 'ttl': 1 };
     this.lasers.push(laser);
+  },
+
+  addSeeker: function(tower_sn, robot_sn) {
+    var tower = this.towerBySerialNumber(tower_sn)
+    if(tower) {
+      var seeker = { angle: 0, x: tower.x + 16, y: tower.y + 16, tower_sn: tower_sn, tracking: robot_sn };
+      this.seekers.push(seeker);
+    }
   },
 
   addTower: function(tower, position) {
@@ -311,3 +357,5 @@ Map.images[10] = new Image();
 Map.images[10].src = '/images/active-tower-slot.png';
 Map.images[20] = new Image();
 Map.images[20].src = '/images/x-tower.png';
+Map.images[50] = new Image();
+Map.images[50].src = '/images/projectile.png';
