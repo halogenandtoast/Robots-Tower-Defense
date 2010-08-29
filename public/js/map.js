@@ -320,7 +320,7 @@ Map.prototype = {
       var length = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
       dX = dX/length;
       dY = dY/length;
-      var seeker = { dX: dX, dY: dY, speed: 2, x: tower.x + 11, y: tower.y + 11, tower_sn: tower_sn, tracking: robot_sn };
+      var seeker = { dX: dX, dY: dY, speed: 4, x: tower.x + 11, y: tower.y + 11, tower_sn: tower_sn, tracking: robot_sn };
       this.seekers.push(seeker);
     }
   },
