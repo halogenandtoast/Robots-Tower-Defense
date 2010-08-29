@@ -20,7 +20,7 @@ Robot.prototype = {
       context.translate(this.x + 16, this.y + 16);
     }
 
-    context.drawImage(this.map.images[this.image], -16, -16);
+    context.drawImage(Map.images[this.image], -16, -16);
     context.restore();
 
   },

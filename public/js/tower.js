@@ -17,14 +17,13 @@ Tower.prototype = {
     context.closePath();
     context.fillStyle = "rgba(0,0,0,0.3)"
     context.fill();
+
     context.save();
     context.translate(this.x, this.y);
     context.drawImage(this.image == 1 ? Tower.imageBottom : Tower.other, 0, 0);
-    context.restore();
 
     if (this.image == 1) {
       context.save();
-      context.translate(this.x, this.y);
       context.translate(0.6274169979695223, 0.6274169979695223);
       context.translate(16, 16);
       context.rotate(this.angle * Math.PI / 180);
@@ -32,9 +31,6 @@ Tower.prototype = {
       context.drawImage(Tower.imageTop, 0, 0);
       context.restore();
     }
-
-    context.save();
-    context.translate(this.x, this.y);
 
     if (this.session_id == Game.map.topPlayer) {
       context.drawImage(Tower.redBadge, 0, 0);

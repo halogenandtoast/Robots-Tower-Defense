@@ -1,5 +1,4 @@
 var Map = function(topPlayerId, bottomPlayerId) {
-  this.loadImages();
   this.setupCanvas();
   this.setupPositions();
 
@@ -64,19 +63,6 @@ Map.prototype = {
     }.bind(this));
   },
 
-  loadImages: function() {
-    this.images = [];
-    this.images[0] = new Image();
-    this.images[0].src = '/images/map.png';
-    this.images[1] = new Image();
-    this.images[1].src = '/images/robot-1.png';
-    this.images[2] = new Image();
-    this.images[2].src = '/images/robot-2.png';
-
-    this.images[100] = new Image();
-    this.images[100].src = '/images/active-tower-slot.png';
-  },
-
   setupPositions: function() {
     this.positions = [];
     for(var i = 0; i < 60; i++) {
@@ -103,7 +89,7 @@ Map.prototype = {
   },
 
   render: function() {
-    this.context.drawImage(this.images[0], 0, 0);
+    this.context.drawImage(Map.images[0], 0, 0);
 
     for (var i = 0, l = this.towers.length; i < l; i++) {
       if (this.towers[i]) {
@@ -146,7 +132,7 @@ Map.prototype = {
       var x = 4 + (((this.active - 1) % 20) * 40);
       var y = 125 + (160 * Math.round((this.active - ((this.active - 1) % 20)) / 20));
 
-      this.context.drawImage(this.images[100], x, y);
+      this.context.drawImage(Map.images[10], x, y);
     }
   },
 
@@ -214,3 +200,13 @@ Map.prototype = {
     }
   }
 };
+
+Map.images = [];
+Map.images[0] = new Image();
+Map.images[0].src = '/images/map.png';
+Map.images[1] = new Image();
+Map.images[1].src = '/images/robot-1.png';
+Map.images[2] = new Image();
+Map.images[2].src = '/images/robot-2.png';
+Map.images[10] = new Image();
+Map.images[10].src = '/images/active-tower-slot.png';

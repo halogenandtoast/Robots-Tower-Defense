@@ -176,7 +176,7 @@ var Game = {
       break;
 
       case 'robots_upgraded':
-        var className = message.robot_type == 'type1' ? '.robot-1-level' : '.robot-2-level';
+        var className = message.type == 'type1' ? '.robot-1-level' : '.robot-2-level';
 
         if (message.id == Game.map.topPlayer) {
           element = $('#player-1 ' + className + ' span')[0];
@@ -217,7 +217,7 @@ var Game = {
               x             : x,
               y             : y,
               dX            : dX,
-              image         : robot.type == 'type1' ? 2 : 1,
+              image         : robot.type == 'type1' ? 1 : 2,
               speed         : robot.speed,
               session_id    : message.id,
               serial_number : robot.serial_number
