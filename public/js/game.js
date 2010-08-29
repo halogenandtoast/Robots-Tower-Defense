@@ -231,19 +231,19 @@ var Game = {
         for (var i = 0, l = message.robots.length; i < l; i++) {
           (function() {
             var x  = -1;
-            var y  = 367;
+            var y  = 332;
             var dX = 1;
             var robot = message.robots[i];
 
             if (message.id != Game.map.bottomPlayer) {
               x  = 801;
-              y  = 200;
+              y  = 172;
               dX = -1;
             }
 
             var robot = new Robot({
               x             : x,
-              y             : y,
+              y             : y + robot.offset,
               dX            : dX,
               image         : robot.type == 'type1' ? 1 : 2,
               speed         : robot.speed,
