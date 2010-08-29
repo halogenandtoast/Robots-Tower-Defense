@@ -62,14 +62,17 @@ var Game = {
     });
 
     $('.add-robot-1', player)[0].addEventListener('click', function(event) {
-      Game.addRobot();
+      Game.addRobot('type1');
+      event.preventDefault();
+    });
 
+    $('.add-robot-2', player)[0].addEventListener('click', function(event) {
+      Game.addRobot('type2');
       event.preventDefault();
     });
 
     $('.launch-wave', player)[0].addEventListener('click', function(event) {
       Game.launchWave();
-
       event.preventDefault();
     });
 
@@ -145,11 +148,12 @@ var Game = {
 
       case 'robot_created':
         var element;
+        var className = message.robot_type == 'type1' ? '.robot-1-count' : '.robot-2-count';
 
         if (message.id == Game.map.topPlayer) {
-          element = $('#player-1 .robot-1-count')[0];
+          element = $('#player-1 ' + className)[0];
         } else {
-          element = $('#player-2 .robot-1-count')[0];
+          element = $('#player-2 ' + className)[0];
         }
 
         element.innerHTML = message.robot_count;
@@ -161,38 +165,39 @@ var Game = {
       break;
 
       case 'wave_launched':
-        var element;
+        var elements;
 
         if (message.id == Game.map.topPlayer) {
-          element = $('#player-1 .robot-1-count')[0];
+          elements = $('#player-1 .robot-1-count, #player-1 .robot-2-count');
         } else {
-          element = $('#player-2 .robot-1-count')[0];
+          elements = $('#player-2 .robot-1-count, #player-2 .robot-2-count');
         }
 
-        element.style.display = 'none';
+        elements.forEach(function(element) {
+          element.style.display = 'none';
+        });
 
         for (var i = 0, l = message.robots.length; i < l; i++) {
           (function() {
-            var x     = -1;
-            var y     = 367;
-            var dX    = 1;
-            var image = 1;
+            var x  = -1;
+            var y  = 367;
+            var dX = 1;
+            var robot = message.robots[i];
 
             if (message.id != Game.map.bottomPlayer) {
-              x     = 801;
-              y     = 200;
-              dX    = -1;
-              image = 2;
+              x  = 801;
+              y  = 200;
+              dX = -1;
             }
 
             var robot = new Robot({
               x             : x,
               y             : y,
               dX            : dX,
-              image         : image,
-              speed         : message.robots[i].speed,
+              image         : robot.type == 'type1' ? 2 : 1,
+              speed         : robot.speed,
               session_id    : message.id,
-              serial_number : message.robots[i].serial_number
+              serial_number : robot.serial_number
             });
 
             setTimeout(function() {
@@ -213,8 +218,8 @@ var Game = {
     console.log(JSON.stringify(message));
   },
 
-  addRobot: function() {
-    Game.send({ 'action' : 'create_robot' });
+  addRobot: function(type) {
+    Game.send({ 'action' : 'create_robot', 'robot_type' : type });
   },
 
   launchWave: function() {

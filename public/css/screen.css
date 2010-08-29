@@ -79,7 +79,8 @@ canvas {
   font: 16px/1 Helvetica, Arial, Sans-serif;
 }
 
-.player .add-robot-1 {
+.player .add-robot-1,
+.player .add-robot-2 {
   position: absolute;
   width: 34px;
   height: 34px;
@@ -98,8 +99,9 @@ canvas {
   display: block;
 }
 
-.player .robot-1-count {
-  position: relative;
+.player .robot-1-count,
+.player .robot-2-count {
+  position: absolute;
   background: url(/images/robot-1.png) no-repeat;
   color: #FFF;
   width: 24px;
@@ -108,6 +110,11 @@ canvas {
   font: 13px/32px Helvetica, Arial, Sans-serif;
   display: block;
   cursor: default;
+}
+
+.player .robot-2-count {
+  background: url(/images/robot-2.png) no-repeat;
+  display: none;
 }
 
 #player-1 {
@@ -130,6 +137,11 @@ canvas {
   left: 158px;
 }
 
+#player-1 .add-robot-2 {
+  top: 42px;
+  left: 158px;
+}
+
 #player-1 .launch-wave {
   right: 6px;
   bottom: 6px;
@@ -137,6 +149,11 @@ canvas {
 
 #player-1 .robot-1-count {
   top: 10px;
+  left: 94px;
+}
+
+#player-1 .robot-2-count {
+  top: 60px;
   left: 94px;
 }
 
@@ -160,6 +177,11 @@ canvas {
   left: 72px;
 }
 
+#player-2 .add-robot-2 {
+  top: 42px;
+  left: 72px;
+}
+
 #player-2 .launch-wave {
   left: 72px;
   bottom: 6px;
@@ -168,6 +190,11 @@ canvas {
 #player-2 .robot-1-count {
   left: 8px;
   top: 10px;
+}
+
+#player-2 .robot-2-count {
+  left: 8px;
+  top: 60px;
 }
 
 .dialogue {
@@ -219,4 +246,26 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+#add-tower {
+  position: absolute;
+  background: url(/images/place-tower.png);
+  width: 82px;
+  height: 46px;
+  z-index: 128;
+  display: none;
+}
+
+#add-tower a {
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  width: 32px;
+  height: 32px;
+  display: block;
+}
+
+#add-tower a + a {
+  left: 42px;
 }
