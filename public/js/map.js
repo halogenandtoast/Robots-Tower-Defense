@@ -137,7 +137,7 @@ Map.prototype = {
   },
 
   addLaser: function(tower_sn, robot_sn) {
-    var laser = { 'from': tower_sn, 'to': robot_sn, 'ttl': 100 };
+    var laser = { 'from': tower_sn, 'to': robot_sn, 'ttl': 1 };
     this.lasers.push(laser);
   },
 
