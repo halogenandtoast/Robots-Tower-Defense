@@ -3,7 +3,7 @@ var Game = {
     var dialogue = document.createElement('div');
     dialogue.innerHTML = html;
     dialogue.className = 'dialogue empty';
-    $('body')[0].appendChild(dialogue);
+    $('#map')[0].appendChild(dialogue);
   },
 
   addDialogue: function(html, clearMap, callback) {
