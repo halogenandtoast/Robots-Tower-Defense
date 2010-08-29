@@ -94,6 +94,12 @@ var Game = {
         });
 
         Game.addDialogue('<img src="/images/help.png"><a href="#">Start</a>');
+
+        $('#player-1 .cash')[0].innerHTML = '$' + message.cash;
+        $('#player-2 .cash')[0].innerHTML = '$' + message.cash;
+
+        Game.robots = message.robots;
+        Game.towers = message.towers;
       break;
 
       case 'game_finished':
