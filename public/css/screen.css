@@ -377,6 +377,7 @@ canvas {
   top: 4px;
   right: 4px;
   z-index: 128;
+  display: none;
 }
 
 #opponent-dashboard.bottom {

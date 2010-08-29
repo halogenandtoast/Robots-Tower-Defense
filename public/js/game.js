@@ -128,6 +128,8 @@ var Game = {
           $('#opponent-dashboard')[0].className = 'top';
         }
 
+        $('#opponent-dashboard')[0].style.display = 'block';
+
         Game.robots = message.robots;
         Game.towers = message.towers;
       break;
