@@ -40,6 +40,14 @@ Tower.prototype = {
       context.drawImage(Tower.blueBadge, 0, 0);
     }
 
+    context.save();
+    context.translate(29, 4);
+
+    for (var i = 0, l = (this.level - 1); i < l; i++) {
+      context.drawImage(Tower.upgradeImage, 0, i * 4);
+    }
+
+    context.restore();
     context.restore();
   },
 
@@ -76,3 +84,7 @@ Tower.redBadge = new Image();
 Tower.redBadge.src = '/images/red-tag.png';
 Tower.blueBadge = new Image();
 Tower.blueBadge.src = '/images/blue-tag.png';
+
+
+Tower.upgradeImage = new Image();
+Tower.upgradeImage.src = '/images/tower-upgrade-identifier.png';
