@@ -1,12 +1,4 @@
 var Game = {
-  bindEventListeners: function() {
-    $('#launch-wave')[0].addEventListener('click', function(event) {
-      Game.launchWave();
-
-      event.preventDefault();
-    });
-  },
-
   connect: function() {
     var
     socket = new io.Socket(window.location.hostname, { port : 8024 });
@@ -18,33 +10,38 @@ var Game = {
   },
 
   onDisconnect: function() {
-    $('#hud')[0].style.display = 'none';
     $('#waiting')[0].style.display = 'block';
     $('#waiting')[0].innerHTML = 'You were disconnected. Reload to play again.';
   },
 
   onReady: function(top_player_id, bottom_player_id) {
     Game.map = new Map(top_player_id, bottom_player_id);
-    Game.bindEventListeners();
 
-    $('#hud')[0].style.display = 'block';
     $('#waiting')[0].style.display = 'none'
 
-    var bind;
-    var remove;
+    var player;
+    var other;
 
     if (Game.session_id == top_player_id) {
-      bind   = $('#player-1 .add-robot-1');
-      remove = $('#player-2 .add-robot-1');
+      other  = $('#player-2')[0];
+      player = $('#player-1')[0];
     } else {
-      bind   = $('#player-2 .add-robot-1');
-      remove = $('#player-1 .add-robot-1');
+      other  = $('#player-1')[0];
+      player = $('#player-2')[0];
     }
 
-    remove = remove[0];
-    remove.parentNode.removeChild(remove);
-    bind[0].addEventListener('click', function(event) {
+    $('a', other).forEach(function(element) {
+      element.parentNode.removeChild(element);
+    });
+
+    $('.add-robot-1', player)[0].addEventListener('click', function(event) {
       Game.addRobot();
+
+      event.preventDefault();
+    });
+
+    $('.launch-wave', player)[0].addEventListener('click', function(event) {
+      Game.launchWave();
 
       event.preventDefault();
     });
@@ -64,6 +61,10 @@ var Game = {
     switch (message.action) {
       case 'game_ready':
         Game.onReady(message.top_player_id, message.bottom_player_id);
+
+        $('.player').forEach(function(element) {
+          element.style.display = 'block';
+        });
       break;
 
       case 'game_finished':
@@ -73,20 +74,32 @@ var Game = {
           $('#waiting')[0].innerHTML = 'You won! Reload to play again.';
         }
 
-        $('#hud')[0].style.display = 'none';
+        $('.player').forEach(function(element) {
+          element.style.display = 'none';
+        });
+
         $('#waiting')[0].style.display = 'block';
       break;
 
       case 'game_disbanded':
-        $('#hud')[0].style.display = 'none';
+        $('.player').forEach(function(element) {
+          element.style.display = 'none';
+        });
+
         $('#waiting')[0].style.display = 'block';
         $('#waiting')[0].innerHTML = 'Your opponent disconnected. Reload to play again.';
       break;
 
       case 'life_lost':
         if (Game.session_id == message.id) {
-          var
-          element = $('#health')[0];
+          var element;
+
+          if (message.id == Game.map.topPlayer) {
+            element = $('#player-1 .lives')[0];
+          } else {
+            element = $('#player-2 .lives')[0];
+          }
+
           element.innerHTML = parseInt(element.innerHTML, 10) - 1;
         }
       break;
@@ -105,9 +118,16 @@ var Game = {
       break;
 
       case 'robot_created':
-        if (Game.session_id == message.id) {
-          $('#robot-count')[0].innerHTML = message.robot_count;
+        var element;
+
+        if (message.id == Game.map.topPlayer) {
+          element = $('#player-1 .robot-1-count')[0];
+        } else {
+          element = $('#player-2 .robot-1-count')[0];
         }
+
+        element.innerHTML = message.robot_count;
+        element.style.display = 'block';
       break;
 
       case 'robot_destroyed':
@@ -115,9 +135,15 @@ var Game = {
       break;
 
       case 'wave_launched':
-        if (Game.session_id == message.id) {
-          $('#robot-count')[0].innerHTML = 0;
+        var element;
+
+        if (message.id == Game.map.topPlayer) {
+          element = $('#player-1 .robot-1-count')[0];
+        } else {
+          element = $('#player-2 .robot-1-count')[0];
         }
+
+        element.style.display = 'none';
 
         for (var i = 0, l = message.robots.length; i < l; i++) {
           (function() {
