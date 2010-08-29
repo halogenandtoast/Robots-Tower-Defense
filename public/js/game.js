@@ -164,9 +164,27 @@ var Game = {
           serial_number: message.serial_number,
           rate: message.rate,
           range: message.range,
-          image: message.tower_type == 'type1' ? 1 : 2
+          image: message.tower_type == 'type1' ? 1 : 2,
+          level: message.level,
+          damage: message.damage,
+          upgrade_cost: message.upgrade_cost
         });
         Game.map.addTower(tower, position);
+      break;
+
+      case 'tower_upgraded':
+        for (var i = 0, l = Game.map.towers.length; i < l; i++) {
+          var tower = Game.map.towers[i];
+
+          if (tower && tower.serial_number == message.serial_number) {
+            tower.rate = message.rate;
+            tower.range = message.range;
+            tower.damage = message.damage;
+            tower.level = message.level;
+            tower.upgrade_cost = message.upgrade_cost;
+            break;
+          }
+        }
       break;
 
       case 'robot_created':

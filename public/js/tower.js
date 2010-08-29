@@ -4,9 +4,11 @@ var Tower = function(options) {
   this.rate   = options.rate   || 0.75;
   this.range  = options.range  || 96;
   this.angle  = 90;
+  this.level  = options.level || 1;
   this.image  = options.image;
   this.damage = options.damage || 1;
   this.session_id = options.session_id;
+  this.upgrade_cost  = options.upgrade_cost;
   this.serial_number = options.serial_number;
 };
 

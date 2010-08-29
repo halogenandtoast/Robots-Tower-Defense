@@ -7,7 +7,8 @@ var Map = function(topPlayerId, bottomPlayerId) {
 };
 
 Map.prototype = {
-  active    : undefined,
+  buildAt   : undefined,
+  upgradeAt : undefined,
   robots    : [],
   towers    : [],
   lasers    : [],
@@ -21,28 +22,70 @@ Map.prototype = {
       var y = event.offsetY;
       var position = 1 + Math.floor(x / 40) + (20 * Math.floor((y - 117) / 160));
 
-      if (y >= 117 && y <= 477 && this.positions[position]) {
+      $('#add-tower')[0].style.display = 'none';
+      $('#upgrade-tower')[0].style.display = 'none';
+
+      if (y >= 117 && y <= 477) {
         var x = 4 + (((position - 1) % 20) * 40);
         var y = 125 + (160 * Math.round((position - ((position - 1) % 20)) / 20));
 
-        this.active = position;
+        if (this.positions[position]) {
+          this.buildAt = position;
 
-        var
-        element = $('#add-tower')[0];
-        element.style.display = 'block';
-        element.style.top  = (y - 44) + 'px';
-        element.style.left = (x - 4) + 'px';
+          var
+          element = $('#add-tower')[0];
+          element.style.top  = (y - 44) + 'px';
+          element.style.left = (x - 4) + 'px';
+          element.style.display = 'block';
+        } else {
+          var tower;
+
+          for (var i = 0, l = this.towers.length; i < l; i++) {
+            tower = this.towers[i];
+
+            if (tower) {
+              if (tower.x == x && tower.y == y) {
+                break;
+              }
+            }
+          }
+
+          this.upgradeAt = tower;
+
+          var
+          element = $('#upgrade-tower')[0];
+          element.style.display = 'block';
+          element.style.top  = (y - 119) + 'px';
+          element.style.left = (x - 4) + 'px';
+
+          $('h2 span', element)[0].innerHTML = tower.level + 1;
+          $('.range span', element)[0].innerHTML = '+1'; // + (tower.rate + 1);
+          $('.damage span', element)[0].innerHTML = '+1'; // + (tower.damage + 1);
+          $('.rate span', element)[0].innerHTML = '+1.25'; // + (tower.range * 1.25);
+          $('.cost', element)[0].innerHTML = '$' + tower.upgrade_cost;
+        }
       }
+    }.bind(this));
+
+    $('#upgrade-tower a')[0].addEventListener('click', function(event) {
+      $('#upgrade-tower')[0].style.display = 'none';
+
+      Game.send({
+        'action'        : 'upgrade_tower',
+        'serial_number' : this.upgradeAt.serial_number
+      });
+
+      event.preventDefault();
     }.bind(this));
 
     $('#add-tower a')[0].addEventListener('click', function(event) {
       Game.send({
         'action'     : 'create_tower',
-        'position'   : this.active,
+        'position'   : this.buildAt,
         'tower_type' : 'type1'
       });
 
-      this.active = undefined;
+      this.buildAt = undefined;
 
       $('#add-tower')[0].style.display = 'none';
 
@@ -51,11 +94,11 @@ Map.prototype = {
     $('#add-tower a + a')[0].addEventListener('click', function(event) {
       Game.send({
         'action'     : 'create_tower',
-        'position'   : this.active,
+        'position'   : this.buildAt,
         'tower_type' : 'type2'
       });
 
-      this.active = undefined;
+      this.buildAt = undefined;
 
       $('#add-tower')[0].style.display = 'none';
 
@@ -128,9 +171,9 @@ Map.prototype = {
       }
     }
 
-    if (this.active) {
-      var x = 4 + (((this.active - 1) % 20) * 40);
-      var y = 125 + (160 * Math.round((this.active - ((this.active - 1) % 20)) / 20));
+    if (this.buildAt) {
+      var x = 4 + (((this.buildAt - 1) % 20) * 40);
+      var y = 125 + (160 * Math.round((this.buildAt - ((this.buildAt - 1) % 20)) / 20));
 
       this.context.drawImage(Map.images[10], x, y);
     }
