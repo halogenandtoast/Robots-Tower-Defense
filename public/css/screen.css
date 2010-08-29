@@ -16,7 +16,8 @@ canvas {
   list-style: none;
 }
 
-canvas {
+#map {
+  position: relative;
   width: 800px;
   height: 600px;
   margin: 0 auto;
@@ -24,7 +25,6 @@ canvas {
 }
 
 #hud {
-  background: #FFF;
   position: fixed;
   right: 5px;
   bottom: 5px;
@@ -46,7 +46,40 @@ canvas {
 
 #win {
   position: fixed;
-  top: 5px;
+  bottom: 5px;
   right: 5px;
   border: 0;
+}
+
+.player {
+  position: absolute;
+  width: 260px;
+  height: 108px;
+  z-index: 128;
+}
+
+.player .cash {
+  position: absolute;
+  color: #FC0;
+  font: 16px/1 Helvetica, Arial, Sans-serif;
+}
+
+#player-1 {
+  top: 4px;
+  right: 4px;
+}
+
+#player-1 .cash {
+  top: 46px;
+  left: 38px;
+}
+
+#player-2 {
+  bottom: 4px;
+  left: 4px;
+}
+
+#player-2 .cash {
+  top: 45px;
+  left: 212px;
 }

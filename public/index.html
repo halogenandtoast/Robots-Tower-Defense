@@ -14,6 +14,7 @@
 </a>
 
 <div id="waiting">Waiting on an opponent...</div>
+
 <div id="hud">
   <ul>
     <li>Cach: <span id="cash">$200</span></li>
@@ -23,8 +24,20 @@
   </ul>
 </div>
 
+<div id="map">
+  <canvas width="800" height="600"></canvas>
+
+  <div id="player-1" class="player">
+    <div class="cash">$200</div>
+  </div>
+  <div id="player-2" class="player">
+    <div class="cash">$200</div>
+  </div>
+</div>
+
 <script src="/js/json2.js"></script>
 <script src="/js/socket.io.js"></script>
+<script src="/js/sizzle.js"></script>
 <script src="/js/map.js"></script>
 <script src="/js/game.js"></script>
 <script src="/js/robot.js"></script>

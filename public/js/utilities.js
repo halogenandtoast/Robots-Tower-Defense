@@ -1,6 +1,4 @@
-function $(id) {
-  return document.getElementById(id);
-}
+var $ = Sizzle;
 
 Function.prototype.bind = function(scope) {
   var _function = this;
