@@ -86,7 +86,9 @@ var Game = {
           x : 4 + (((position - 1) % 20) * 40),
           y : 125 + (160 * Math.round((position - ((position - 1) % 20)) / 20)),
           session_id : message.id,
-          serial_number: message.serial_number
+          serial_number: message.serial_number,
+          rate: message.rate,
+          range: message.range
         });
         Game.map.addTower(tower, position);
       break;
