@@ -1,12 +1,12 @@
 var Game = {
   bindEventListeners: function() {
-    $('add-robot').addEventListener('click', function(event) {
+    $('#add-robot')[0].addEventListener('click', function(event) {
       Game.addRobot();
 
       event.preventDefault();
     });
 
-    $('launch-wave').addEventListener('click', function(event) {
+    $('#launch-wave')[0].addEventListener('click', function(event) {
       Game.launchWave();
 
       event.preventDefault();
@@ -24,17 +24,17 @@ var Game = {
   },
 
   onDisconnect: function() {
-    $('hud').style.display = 'none';
-    $('waiting').style.display = 'block';
-    $('waiting').innerHTML = 'You were disconnected. Reload to play again.';
+    $('#hud')[0].style.display = 'none';
+    $('#waiting')[0].style.display = 'block';
+    $('#waiting')[0].innerHTML = 'You were disconnected. Reload to play again.';
   },
 
   onReady: function(top_player_id, bottom_player_id) {
     Game.map = new Map(top_player_id, bottom_player_id);
     Game.bindEventListeners();
 
-    $('hud').style.display = 'block';
-    $('waiting').style.display = 'none'
+    $('#hud')[0].style.display = 'block';
+    $('#waiting')[0].style.display = 'none'
 
     setInterval(function() {
       Game.map.cycle();
@@ -55,25 +55,25 @@ var Game = {
 
       case 'game_finished':
         if (Game.session_id == message.id) {
-          $('waiting').innerHTML = 'You lost! Reload to play again.';
+          $('#waiting')[0].innerHTML = 'You lost! Reload to play again.';
         } else {
-          $('waiting').innerHTML = 'You won! Reload to play again.';
+          $('#waiting')[0].innerHTML = 'You won! Reload to play again.';
         }
 
-        $('hud').style.display = 'none';
-        $('waiting').style.display = 'block';
+        $('#hud')[0].style.display = 'none';
+        $('#waiting')[0].style.display = 'block';
       break;
 
       case 'game_disbanded':
-        $('hud').style.display = 'none';
-        $('waiting').style.display = 'block';
-        $('waiting').innerHTML = 'Your opponent disconnected. Reload to play again.';
+        $('#hud')[0].style.display = 'none';
+        $('#waiting')[0].style.display = 'block';
+        $('#waiting')[0].innerHTML = 'Your opponent disconnected. Reload to play again.';
       break;
 
       case 'life_lost':
         if (Game.session_id == message.id) {
           var
-          element = $('health');
+          element = $('#health')[0];
           element.innerHTML = parseInt(element.innerHTML, 10) - 1;
         }
       break;
@@ -91,7 +91,7 @@ var Game = {
 
       case 'robot_created':
         if (Game.session_id == message.id) {
-          $('robot-count').innerHTML = message.robot_count;
+          $('#robot-count')[0].innerHTML = message.robot_count;
         }
       break;
 
@@ -101,7 +101,7 @@ var Game = {
 
       case 'wave_launched':
         if (Game.session_id == message.id) {
-          $('robot-count').innerHTML = 0;
+          $('#robot-count')[0].innerHTML = 0;
         }
 
         for (var i = 0, l = message.robots.length; i < l; i++) {
@@ -136,9 +136,9 @@ var Game = {
       break;
       case 'cash_amount':
         if (message.id == Game.map.topPlayer) {
-          Sizzle('#player-1 .cash')[0].innerHTML = '$' + message.amount;
+          $('#player-1 .cash')[0].innerHTML = '$' + message.amount;
         } else {
-          Sizzle('#player-2 .cash')[0].innerHTML = '$' + message.amount;
+          $('#player-2 .cash')[0].innerHTML = '$' + message.amount;
         }
       break;
     }
