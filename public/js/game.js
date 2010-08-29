@@ -137,6 +137,11 @@ var Game = {
           })();
         }
       break;
+      case 'cash_amount':
+        if (Game.session_id == message.id) {
+          $('cash').innerHTML = '$'+message.amount;
+        }
+      break;
     }
 
     console.log(message);
