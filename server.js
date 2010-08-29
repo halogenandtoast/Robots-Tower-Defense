@@ -73,7 +73,7 @@ socket.on('connection', function(client) {
 setInterval(function() {
   World.games.forEach(function(game) {
     game.players.forEach(function(player) {
-      player.cash_received({ amount : 10 });
+      player.cash_received({ amount : 25 });
     });
   });
 }, 5000);
