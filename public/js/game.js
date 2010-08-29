@@ -121,6 +121,10 @@ var Game = {
 
         $('#player-1 .cash')[0].innerHTML = '$' + message.cash;
         $('#player-2 .cash')[0].innerHTML = '$' + message.cash;
+        $('a.upgrade-robot-1 span')[0].innerHTML = '$' + message.robots.type1.upgrade_cost;
+        $('a.upgrade-robot-2 span')[0].innerHTML = '$' + message.robots.type2.upgrade_cost;
+        $('#add-tower-1 span')[0].innerHTML = '$' + message.towers.type1.cost;
+        $('#add-tower-2 span')[0].innerHTML = '$' + message.towers.type2.cost;
 
         if (Game.session_id == message.top_player_id) {
           $('#opponent-dashboard')[0].className = 'bottom';

@@ -5,6 +5,7 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 h1 {
@@ -386,4 +387,28 @@ canvas {
   right: auto;
   bottom: 4px;
   left: 4px;
+}
+
+a.upgrade-robot-1, a.upgrade-robot-2, a#add-tower-1, a#add-tower-2 {
+  text-decoration: none;
+}
+
+a.upgrade-robot-1 span, a.upgrade-robot-2 span, a#add-tower-1 span, a#add-tower-2 span {
+  display: none;
+}
+
+a.upgrade-robot-1:hover span, a.upgrade-robot-2:hover span, a#add-tower-1:hover span, a#add-tower-2:hover span {
+  display: block;
+  position: absolute;
+  top: 30px;
+  left: 15px;
+  padding: 5px;
+  background: rgba(0,0,0,0.8);
+  border: 1px solid #000;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  color: #FC0;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 10000;
 }
