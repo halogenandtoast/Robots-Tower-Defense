@@ -94,6 +94,17 @@ Map.prototype = {
       event.preventDefault();
     }.bind(this));
 
+    $('#upgrade-tower a')[0].addEventListener('click', function(event) {
+      $('#upgrade-tower')[0].style.display = 'none';
+
+      Game.send({
+        'action'        : 'upgrade_tower',
+        'serial_number' : this.upgradeAt.serial_number
+      });
+
+      event.preventDefault();
+    }.bind(this));
+
     $('#add-tower a')[0].addEventListener('click', function(event) {
       Game.send({
         'action'     : 'create_tower',
