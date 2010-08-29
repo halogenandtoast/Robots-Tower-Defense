@@ -188,7 +188,7 @@ Map.prototype = {
             this.seekers[i].x = this.seekers[i].x + (2 * dX);
             this.seekers[i].y = this.seekers[i].y + (2 * dY);
           } else {
-            if(Game.session_id != this.session_id) {
+            if(Game.session_id != robot.session_id) {
               Game.send({
                   'action'              : 'damage_robot',
                   'tower_serial_number' : this.seekers[i].tower_sn,
@@ -243,7 +243,7 @@ Map.prototype = {
           this.context.strokeStyle = "#FF00FF";
           this.context.stroke();
           this.context.restore();
-          if(Game.session_id != this.session_id) {
+          if(Game.session_id != robot.session_id) {
             Game.send({
               'action'              : 'damage_robot',
               'tower_serial_number' : tower.serial_number,
