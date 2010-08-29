@@ -1,10 +1,18 @@
 html,
 body {
-  background: #000;
+  background: #000 url(/images/body.png);
   color: #FFF;
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+
+h1 {
+  text-indent: -9999px;
+  background: url(/images/h1.png);
+  margin: 25px auto;
+  width: 413px;
+  height: 81px;
 }
 
 ul,
@@ -16,12 +24,20 @@ canvas {
   list-style: none;
 }
 
-#map {
-  position: relative;
+#map-cont {
   width: 800px;
   height: 600px;
+  position: relative;
   margin: 0 auto;
+  padding: 10px;
+  background-image: url(/images/map-cont.png);
+}
+
+#map {
   display: block;
+  width: 800px;
+  height: 600px;
+  position: relative;
 }
 
 #waiting {
@@ -184,7 +200,7 @@ canvas {
   position: absolute;
   color: #FFF;
   right: 44px;
-  bottom: 40px;
+  bottom: 50px;
   width: 110px;
   height: 35px;
   font-size: 14px;
@@ -203,25 +219,4 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
-}
-
-#add-tower {
-  position: absolute;
-  background: url(/images/place-tower.png);
-  width: 82px;
-  height: 46px;
-  z-index: 128;
-}
-
-#add-tower a {
-  position: absolute;
-  top: 4px;
-  left: 8px;
-  width: 32px;
-  height: 32px;
-  display: block;
-}
-
-#add-tower a + a {
-  left: 42px;
 }
