@@ -353,6 +353,7 @@ canvas {
   position: absolute;
   top: 70px;
   left: 40px;
+  color: #FC0;
 }
 
 #upgrade-tower a {
