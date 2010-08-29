@@ -83,13 +83,12 @@ var Game = {
       case 'tower_created':
         var position = message.position;
         var tower    = new Tower({
-          x : 4 + ((position % 20) * 40) - 40,
-          y : 125 + (160 * Math.round((position - (position % 20)) / 20)),
+          x : 4 + (((position - 1) % 20) * 40),
+          y : 125 + (160 * Math.round((position - ((position - 1) % 20)) / 20)),
           session_id : message.id,
           serial_number: message.serial_number
         });
-
-        Game.map.towers.push(tower);
+        Game.map.addTower(tower, position);
       break;
 
       case 'robot_created':
@@ -110,7 +109,7 @@ var Game = {
         for (var i = 0, l = message.robots.length; i < l; i++) {
           (function() {
             var x     = -1;
-            var y     = 360;
+            var y     = 367;
             var dX    = 1;
             var image = 1;
 

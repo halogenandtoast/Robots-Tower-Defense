@@ -1,6 +1,7 @@
 var Map = function(topPlayerId, bottomPlayerId) {
   this.loadImages();
   this.createCanvas();
+  this.setupPositions();
   this.topPlayer = topPlayerId;
   this.bottomPlayer = bottomPlayerId;
 };
@@ -9,8 +10,10 @@ Map.prototype = {
   robots : [],
   towers : [],
   lasers: [],
+  positions: [],
 
   createCanvas: function() {
+    var self = this;
     this.body    = document.getElementsByTagName('body')[0];
     this.canvas  = document.createElement('canvas');
     this.context = this.canvas.getContext('2d');
@@ -19,11 +22,11 @@ Map.prototype = {
     this.canvas.addEventListener('click', function(event) {
       var x = event.offsetX;
       var y = event.offsetY;
-
-      if (y >= 117 && y <= 477) {
+      var position = 1 + Math.floor(x / 40) + (20 * Math.floor((y - 117) / 160));
+      if (y >= 117 && y <= 477 && self.positions[position]) {
         Game.send({
           'action'   : 'create_tower',
-          'position' : 1 + Math.floor(x / 40) + (20 * Math.floor((y - 117) / 160))
+          'position' : position
         });
       }
     });
@@ -38,6 +41,13 @@ Map.prototype = {
     this.images[1].src = '/images/robot-1.png';
     this.images[2] = new Image();
     this.images[2].src = '/images/robot-2.png';
+  },
+
+  setupPositions: function() {
+    this.positions = [];
+    for(var i = 0; i < 60; i++) {
+      this.positions.push(true);
+    }
   },
 
   cycle: function() {
@@ -101,7 +111,7 @@ Map.prototype = {
         continue;
       }
 
-      if (Math.pow((x - robot.x + 32), 2) + Math.pow((y - robot.y + 32), 2) < Math.pow(radius, 2)) {
+      if (Math.pow((x - robot.x + 16), 2) + Math.pow((y - robot.y + 16), 2) < Math.pow(radius, 2)) {
         return robot;
       }
     }
@@ -125,6 +135,11 @@ Map.prototype = {
   addLaser: function(tower_sn, robot_sn) {
     var laser = { 'from': tower_sn, 'to': robot_sn, 'ttl': 100 };
     this.lasers.push(laser);
+  },
+
+  addTower: function(tower, position) {
+    this.towers.push(tower);
+    this.positions[position] = false;
   },
 
   removeRobotBySerialNumber: function(serial_number) {
