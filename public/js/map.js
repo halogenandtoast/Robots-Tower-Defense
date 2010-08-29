@@ -259,7 +259,6 @@ Map.prototype = {
       var seeker = this.seekers[i];
       this.context.save();
       this.context.translate(seeker.x + 3, seeker.y + 4);
-      alert(seeker.angle);
       this.context.rotate(-seeker.angle + Math.PI);
       this.context.drawImage(Map.images[50], -3, -4);
       this.context.restore();
