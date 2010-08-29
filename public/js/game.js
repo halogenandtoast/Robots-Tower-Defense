@@ -71,12 +71,12 @@ var Game = {
     });
 
     $('.add-robot-1', player)[0].addEventListener('click', function(event) {
-      Game.addRobot('type1');
+      Game.addRobot('type2');
       event.preventDefault();
     });
 
     $('.add-robot-2', player)[0].addEventListener('click', function(event) {
-      Game.addRobot('type2');
+      Game.addRobot('type1');
       event.preventDefault();
     });
 
@@ -193,7 +193,7 @@ var Game = {
 
       case 'robot_created':
         var element;
-        var className = message.robot_type == 'type1' ? '.robot-1-count' : '.robot-2-count';
+        var className = message.robot_type == 'type2' ? '.robot-1-count' : '.robot-2-count';
 
         if (message.id == Game.map.topPlayer) {
           element = $('#player-1 ' + className)[0];
