@@ -81,12 +81,12 @@ var Game = {
     });
 
     $('.upgrade-robot-1', player)[0].addEventListener('click', function(event) {
-      Game.upgradeRobot('type1');
+      Game.upgradeRobot('type2');
       event.preventDefault();
     });
 
     $('.upgrade-robot-2', player)[0].addEventListener('click', function(event) {
-      Game.upgradeRobot('type2');
+      Game.upgradeRobot('type1');
       event.preventDefault();
     });
 
