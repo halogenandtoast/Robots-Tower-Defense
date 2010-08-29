@@ -30,9 +30,7 @@ var Game = {
   },
 
   onReady: function(top_player_id, bottom_player_id) {
-    console.log(top_player_id);
-    console.log(bottom_player_id);
-    Game.map    = new Map(top_player_id, bottom_player_id);
+    Game.map = new Map(top_player_id, bottom_player_id);
     Game.bindEventListeners();
 
     $('hud').style.display = 'block';
@@ -137,13 +135,15 @@ var Game = {
         }
       break;
       case 'cash_amount':
-        if (Game.session_id == message.id) {
-          $('cash').innerHTML = '$'+message.amount;
+        if (message.id == Game.map.topPlayer) {
+          Sizzle('#player-1 .cash')[0].innerHTML = '$' + message.amount;
+        } else {
+          Sizzle('#player-2 .cash')[0].innerHTML = '$' + message.amount;
         }
       break;
     }
 
-    console.log(message);
+    console.log(JSON.stringify(message));
   },
 
   addRobot: function() {
