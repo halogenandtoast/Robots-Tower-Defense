@@ -24,6 +24,7 @@ Map.prototype = {
 
       $('#add-tower')[0].style.display = 'none';
       $('#upgrade-tower')[0].style.display = 'none';
+      this.upgradeAt = undefined;
 
       if((this.topPlayer == Game.session_id && position > 20) || (this.bottomPlayer == Game.session_id && position <= 40)) {
         if (y >= 117 && y <= 477) {
@@ -52,33 +53,7 @@ Map.prototype = {
             }
 
             this.upgradeAt = tower;
-
-            var
-            element = $('#upgrade-tower')[0];
-            element.style.top  = (y - 119) + 'px';
-            element.style.left = (x - 4) + 'px';
-
-            $('h2 span', element)[0].innerHTML = tower.level + 1;
-            $('.range span', element)[0].innerHTML = '+1'; // + (tower.rate + 1);
-            $('.damage span', element)[0].innerHTML = '+1'; // + (tower.damage + 1);
-            $('.rate span', element)[0].innerHTML = '+1.25'; // + (tower.range * 1.25);
-            $('.cost', element)[0].innerHTML = '$' + tower.upgrade_cost;
-
-            var cash;
-
-            if (Game.session_id == Game.map.topPlayer) {
-              cash = parseInt($('#player-1 .cash')[0].innerText.replace('$', ''), 10);
-            } else {
-              cash = parseInt($('#player-2 .cash')[0].innerText.replace('$', ''), 10);
-            }
-
-            if (cash < tower.upgrade_cost) {
-              $('a', element)[0].className = 'disabled';
-            } else {
-              $('a', element)[0].className = '';
-            }
-
-            element.style.display = 'block';
+            this.updateTowerUpgrade(x, y, true);
           }
         }
       }
@@ -138,6 +113,45 @@ Map.prototype = {
     this.positions = [];
     for(var i = 0; i < 60; i++) {
       this.positions.push(true);
+    }
+  },
+
+  updateTowerUpgrade: function(x, y, show) {
+    var tower = this.upgradeAt;
+
+    if (!tower) {
+      return;
+    }
+
+    var element = $('#upgrade-tower')[0];
+
+    if (x && y) {
+      element.style.top  = (y - 119) + 'px';
+      element.style.left = (x - 4) + 'px';
+    }
+
+    $('h2 span', element)[0].innerHTML = tower.level + 1;
+    $('.range span', element)[0].innerHTML = '+1'; // + (tower.rate + 1);
+    $('.damage span', element)[0].innerHTML = '+1'; // + (tower.damage + 1);
+    $('.rate span', element)[0].innerHTML = '+1.25'; // + (tower.range * 1.25);
+    $('.cost', element)[0].innerHTML = '$' + tower.upgrade_cost;
+
+    var cash;
+
+    if (Game.session_id == Game.map.topPlayer) {
+      cash = parseInt($('#player-1 .cash')[0].innerText.replace('$', ''), 10);
+    } else {
+      cash = parseInt($('#player-2 .cash')[0].innerText.replace('$', ''), 10);
+    }
+
+    if (cash < tower.upgrade_cost) {
+      $('a', element)[0].className = 'disabled';
+    } else {
+      $('a', element)[0].className = '';
+    }
+
+    if (show) {
+      element.style.display = 'block';
     }
   },
 
