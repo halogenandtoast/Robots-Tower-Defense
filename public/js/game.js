@@ -1,5 +1,12 @@
 var Game = {
-  addDialogue: function(html, clearMap) {
+  addEmptyDialogue: function(html) {
+    var dialogue = document.createElement('div');
+    dialogue.innerHTML = html;
+    dialogue.className = 'dialogue empty';
+    $('body')[0].appendChild(dialogue);
+  },
+
+  addDialogue: function(html, clearMap, callback) {
     var
     dialogue = document.createElement('div');
     dialogue.innerHTML = html;
@@ -14,7 +21,9 @@ var Game = {
     $('#map')[0].appendChild(dialogue);
     $('.dialogue')[0].addEventListener('click', function(event) {
       Game.removeDialogue();
-
+      if(callback) {
+        callback();
+      }
       event.preventDefault();
     });
   },
@@ -91,6 +100,10 @@ var Game = {
     }.bind(this), 1000 / 30);
   },
 
+  displayHelp: function(button_text, callback) {
+    Game.addDialogue('<img src="/images/help.png"><a href="#help">'+button_text+'</a>', false, callback);
+  },
+
   onMessage: function(message) {
     if (!Game.session_id) {
       Game.session_id = Game.socket.transport.sessionid;
@@ -106,7 +119,6 @@ var Game = {
           element.style.display = 'block';
         });
 
-        Game.addDialogue('<img src="/images/help.png"><a href="#">Start</a>');
 
         $('#player-1 .cash')[0].innerHTML = '$' + message.cash;
         $('#player-2 .cash')[0].innerHTML = '$' + message.cash;
