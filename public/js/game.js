@@ -1,11 +1,5 @@
 var Game = {
   bindEventListeners: function() {
-    $('#add-robot')[0].addEventListener('click', function(event) {
-      Game.addRobot();
-
-      event.preventDefault();
-    });
-
     $('#launch-wave')[0].addEventListener('click', function(event) {
       Game.launchWave();
 
@@ -35,6 +29,25 @@ var Game = {
 
     $('#hud')[0].style.display = 'block';
     $('#waiting')[0].style.display = 'none'
+
+    var bind;
+    var remove;
+
+    if (Game.session_id == top_player_id) {
+      bind   = $('#player-1 .add-robot-1');
+      remove = $('#player-2 .add-robot-1');
+    } else {
+      bind   = $('#player-2 .add-robot-1');
+      remove = $('#player-1 .add-robot-1');
+    }
+
+    remove = remove[0];
+    remove.parentNode.removeChild(remove);
+    bind[0].addEventListener('click', function(event) {
+      Game.addRobot();
+
+      event.preventDefault();
+    });
 
     setInterval(function() {
       Game.map.cycle();
