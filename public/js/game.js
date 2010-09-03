@@ -293,8 +293,6 @@ var Game = {
         break;
       break;
     }
-
-    console.log(JSON.stringify(message));
   },
 
   addRobot: function(type) {
