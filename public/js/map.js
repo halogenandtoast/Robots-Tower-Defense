@@ -19,8 +19,8 @@ Map.prototype = {
     this.canvas  = document.getElementsByTagName('canvas')[0];
     this.context = this.canvas.getContext('2d');
     this.canvas.addEventListener('click', function(event) {
-      var x = event.offsetX;
-      var y = event.offsetY;
+      var x = event.offsetX || event.layerX;
+      var y = event.offsetY || event.layerY;
       var position = 1 + Math.floor(x / 40) + (20 * Math.floor((y - 117) / 160));
 
       $('#add-tower')[0].style.display = 'none';
@@ -53,14 +53,14 @@ Map.prototype = {
               }
             }
 
-            if (tower.session_id == Game.session_id) {
+            if (tower && tower.session_id == Game.session_id) {
               this.upgradeAt = tower;
               this.updateTowerUpgrade(x, y, true);
             }
           }
         }
       }
-    }.bind(this));
+    }.bind(this), true);
 
     $('#upgrade-tower a')[0].addEventListener('click', function(event) {
       $('#upgrade-tower')[0].style.display = 'none';
@@ -71,7 +71,7 @@ Map.prototype = {
       });
 
       event.preventDefault();
-    }.bind(this));
+    }.bind(this), true);
 
     $('#upgrade-tower a')[0].addEventListener('click', function(event) {
       $('#upgrade-tower')[0].style.display = 'none';
@@ -82,7 +82,7 @@ Map.prototype = {
       });
 
       event.preventDefault();
-    }.bind(this));
+    }.bind(this), true);
 
     $('#add-tower a')[0].addEventListener('click', function(event) {
       Game.send({
@@ -96,7 +96,7 @@ Map.prototype = {
       $('#add-tower')[0].style.display = 'none';
 
       event.preventDefault();
-    }.bind(this));
+    }.bind(this), true);
     $('#add-tower a + a')[0].addEventListener('click', function(event) {
       Game.send({
         'action'     : 'create_tower',
@@ -109,7 +109,7 @@ Map.prototype = {
       $('#add-tower')[0].style.display = 'none';
 
       event.preventDefault();
-    }.bind(this));
+    }.bind(this), true);
   },
 
   setupPositions: function() {
@@ -142,9 +142,9 @@ Map.prototype = {
     var cash;
 
     if (Game.session_id == Game.map.topPlayer) {
-      cash = parseInt($('#player-1 .cash')[0].innerText.replace('$', ''), 10);
+      cash = parseInt($('#player-1 .cash')[0].innerHTML.replace('$', ''), 10);
     } else {
-      cash = parseInt($('#player-2 .cash')[0].innerText.replace('$', ''), 10);
+      cash = parseInt($('#player-2 .cash')[0].innerHTML.replace('$', ''), 10);
     }
 
     if (cash < tower.upgrade_cost) {

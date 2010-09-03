@@ -25,7 +25,7 @@ var Game = {
         callback();
         event.preventDefault();
       }
-    });
+    }, true);
   },
 
   removeDialogue: function() {
@@ -73,27 +73,27 @@ var Game = {
     $('.add-robot-1', player)[0].addEventListener('click', function(event) {
       Game.addRobot('type2');
       event.preventDefault();
-    });
+    }, true);
 
     $('.add-robot-2', player)[0].addEventListener('click', function(event) {
       Game.addRobot('type1');
       event.preventDefault();
-    });
+    }, true);
 
     $('.upgrade-robot-1', player)[0].addEventListener('click', function(event) {
       Game.upgradeRobot('type2');
       event.preventDefault();
-    });
+    }, true);
 
     $('.upgrade-robot-2', player)[0].addEventListener('click', function(event) {
       Game.upgradeRobot('type1');
       event.preventDefault();
-    });
+    }, true);
 
     $('.launch-wave', player)[0].addEventListener('click', function(event) {
       Game.launchWave();
       event.preventDefault();
-    });
+    }, true);
 
     setInterval(function() {
       Game.map.cycle();

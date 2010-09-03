@@ -4,3 +4,5 @@ var callback = function() {
   Game.connect();
 }
 Game.displayHelp('Start', callback);
+
+io.setPath('/vendor/');
