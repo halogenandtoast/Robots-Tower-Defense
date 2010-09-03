@@ -71,15 +71,13 @@ socket.on('connection', function(client) {
 });
 
 setInterval(function() {
-  if (World.games) {
-    World.games.forEach(function(game) {
-      if (game && game.players && game.players.length == 2) {
-        game.players.forEach(function(player) {
-          player.cash_received({ amount : 25 });
-        });
-      }
-    });
-  }
+  World.games.forEach(function(game) {
+    if (game.players.length == 2) {
+      game.players.forEach(function(player) {
+        player.cash_received({ amount : 25 });
+      });
+    }
+  });
 }, 5000);
 
 var
