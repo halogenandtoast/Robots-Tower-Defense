@@ -60,6 +60,10 @@ canvas {
   border: 0;
 }
 
+#win img {
+  border: 0;
+}
+
 .player {
   position: absolute;
   width: 260px;
